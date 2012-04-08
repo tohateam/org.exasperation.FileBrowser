@@ -25,7 +25,7 @@ public class FileBrowser extends ListActivity
     File currentDirectory = new File(homeDirectory);
     List<String> directoryEntries = new ArrayList<String>();
 
-   /** Called when the activity is first created. */
+    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -38,9 +38,8 @@ public class FileBrowser extends ListActivity
     {
         if (aDirectory.isDirectory())
         {
-            Log.d (TAG, "DIRECTOREEEEEEE");
             currentDirectory = aDirectory;
-            File[] fileList = currentDirectory.listFiles();
+            String[] fileList = currentDirectory.list();
             Arrays.sort(fileList);
             fill(fileList);
         }
@@ -69,31 +68,27 @@ public class FileBrowser extends ListActivity
         browseTo(new File(ROOT_DIR));
     }
 
-	private void fill(File[] files) {
+	private void fill(String[] files) {
 		this.directoryEntries.clear();
-        Log.d (TAG, "currentDirectory.getAbsolutePath: "+ currentDirectory.getAbsolutePath());
         if (currentDirectory.getParentFile() != null )
             directoryEntries.add(getString(R.string.up_one_level));
-        else
-            Log.d (TAG, "NULLLY");
-	    for (File file : files){
-	        this.directoryEntries.add(file.getName());
+
+	    for (String file : files){
+	        this.directoryEntries.add(file);
 	    }
 
-        ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, this.directoryEntries);
+        ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, this.directoryEntries);
         setListAdapter(directoryList);
         
     }
 
-    public void onListItemClick(ListView list,View view, int position, long id)
+    public void onListItemClick(ListView list, View view, int position, long id)
     {
-        Log.d (TAG, "pos:"+position+" id:"+id);
         String newPath = null;
         if (directoryEntries.get(position) == getString(R.string.up_one_level))
             newPath = currentDirectory.getParent();
         else
             newPath = currentDirectory.getAbsolutePath() + DIR_DIVIDER + directoryEntries.get(position);
-        Log.d (TAG, newPath + " WHEEE"); 
         browseTo(new File(newPath));
     }
 }
