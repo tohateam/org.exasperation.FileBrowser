@@ -18,11 +18,14 @@ import android.os.Bundle;
 public class FileBrowser extends ListActivity
 {
     public static final String TAG = "org.exasperation.FileManager";
-
-    File currentDirectory = new File("/sdcard/");
+    public static final String DIR_DIVIDER = "/";
+    public static final String ROOT_DIR = "/";
+    
+    String homeDirectory = "/sdcard/";
+    File currentDirectory = new File(homeDirectory);
     List<String> directoryEntries = new ArrayList<String>();
 
-    /** Called when the activity is first created. */
+   /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -63,14 +66,14 @@ public class FileBrowser extends ListActivity
 
     private void browseToRoot()
     {
-        browseTo(new File("/"));
+        browseTo(new File(ROOT_DIR));
     }
 
 	private void fill(File[] files) {
 		this.directoryEntries.clear();
         Log.d (TAG, "currentDirectory.getAbsolutePath: "+ currentDirectory.getAbsolutePath());
         if (currentDirectory.getParentFile() != null )
-            directoryEntries.add("..");
+            directoryEntries.add(getString(R.string.up_one_level));
         else
             Log.d (TAG, "NULLLY");
 	    for (File file : files){
@@ -86,10 +89,10 @@ public class FileBrowser extends ListActivity
     {
         Log.d (TAG, "pos:"+position+" id:"+id);
         String newPath = null;
-        if (directoryEntries.get(position) == "..")
+        if (directoryEntries.get(position) == getString(R.string.up_one_level))
             newPath = currentDirectory.getParent();
         else
-            newPath = currentDirectory.getAbsolutePath() + "/" + directoryEntries.get(position);
+            newPath = currentDirectory.getAbsolutePath() + DIR_DIVIDER + directoryEntries.get(position);
         Log.d (TAG, newPath + " WHEEE"); 
         browseTo(new File(newPath));
     }
