@@ -2,5 +2,4 @@
 <resources>
     <string name="app_name">File Manager</string>
     <string name="up_one_level">..</string>
-    <string name="current_dir">.</string>
 </resources>
