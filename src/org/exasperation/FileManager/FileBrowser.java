@@ -91,6 +91,21 @@ public class FileBrowser extends ListActivity
         newPath = currentDirectory.getAbsolutePath() + DIR_DIVIDER + directoryEntries.get(position).getName();
         browseTo(new File(newPath));
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go up
+                if (currentDirectory.getParentFile() != null)
+                {
+                    browseTo(currentDirectory.getParentFile());
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
     private class FileAdapter extends ArrayAdapter<File> {
