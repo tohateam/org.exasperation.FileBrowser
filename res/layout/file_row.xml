@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
+    android:minHeight="48dp"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
 >
+    <ImageView
+        android:id="@+id/file_icon"
+        android:layout_alignParentLeft="true"
+        android:layout_height="match_parent"
+        android:layout_width="48dp"
+    />
     <TextView
         android:id="@+id/file_name"
+        android:layout_toRightOf="@id/file_icon"
+        android:layout_alignParentTop="true"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:paddingTop="4dp"
+        android:textColor="#FFFFFF"
     />
     <TextView
         android:id="@+id/file_meta"
+        android:layout_toRightOf="@id/file_icon"
+        android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:paddingBottom="4dp"
+        android:textColor="#555555"
     />
-</LinearLayout>
+</RelativeLayout>
