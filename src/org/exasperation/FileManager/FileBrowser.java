@@ -1,5 +1,5 @@
-package org.exasperatio
-n.FileManager;
+package org.exasperation.FileManager;
+
 import android.view.MenuItem; 
 
 import java.util.Date;
