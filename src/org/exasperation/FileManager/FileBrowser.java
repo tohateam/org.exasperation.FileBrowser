@@ -1,23 +1,31 @@
 package org.exasperation.FileManager;
 
 import java.io.File;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem; 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ArrayAdapter;
 
 import android.app.ListActivity;
 import android.os.Bundle;
@@ -32,6 +40,7 @@ public class FileBrowser extends ListActivity
     String homeDirectory = "/sdcard/";
     File currentDirectory = new File(homeDirectory);
     List<File> directoryEntries = new ArrayList<File>();
+    ActionBar topMenu = null;
 
     /** Called when the activity is first created. */
     @Override
@@ -40,6 +49,9 @@ public class FileBrowser extends ListActivity
 
         super.onCreate(savedInstanceState);
         browseTo(currentDirectory);
+        topMenu = getActionBar();
+        Log.d(TAG, "hurrrr");
+        topMenu.setHomeButtonEnabled(true);
     }
 
     private void browseTo(final File aDirectory)
@@ -95,11 +107,14 @@ public class FileBrowser extends ListActivity
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "Home button pressed");
         switch (item.getItemId()) {
             case android.R.id.home:
+                Log.d(TAG, "Home button recognized");
                 // app icon in action bar clicked; go up
                 if (currentDirectory.getParentFile() != null)
                 {
+                    Log.d(TAG, "Parent Directory valid");
                     browseTo(currentDirectory.getParentFile());
                 }
                 return true;
@@ -107,7 +122,6 @@ public class FileBrowser extends ListActivity
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     private class FileAdapter extends ArrayAdapter<File> {
         private List<File> files;
@@ -127,6 +141,41 @@ public class FileBrowser extends ListActivity
             if (o != null) {
                 TextView fileName = (TextView) v.findViewById(R.id.file_name);
                 TextView fileMeta = (TextView) v.findViewById(R.id.file_meta);
+                ImageView fileIcon = (ImageView) v.findViewById(R.id.file_icon);
+                
+                Drawable icon = null;
+
+                if (o.isDirectory()) {
+                    icon = getResources().getDrawable(R.drawable.folder);
+                }
+                else {
+                    String type = URLConnection.guessContentTypeFromName(o.getName());
+                    Log.d (TAG, "type guessed as " + type);
+                    if (type != null) {
+                        final Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.fromFile(o), type);
+                        Log.d (TAG, "Intent prepared: " + Uri.fromFile(o));
+    
+                        final List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                        Log.d (TAG, "Found matches");
+    
+                        if (matches.size() > 0)
+                        {
+                            //Only get first match, since we can't display a whole list of icons
+                            //OR CAN WE????
+                            //Yea we can't fuck you
+                            icon = matches.get(0).loadIcon(getPackageManager());
+                            Log.d (TAG, "Icon set to Activity");
+                        }
+                        else {
+                            //icon = generic file icon
+                        }
+                    }
+                }
+
+                fileIcon.setImageDrawable(icon);
+                 
+                
                 if (fileName != null) {
                     fileName.setText(o.getName());
                 }
