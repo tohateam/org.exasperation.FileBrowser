@@ -1,1 +1,13 @@
 The file manager Android (4.0+) should have shipped with
+
+TODO:
+
+-add MIME based icons to file listings
+-display file sizes in meta field
+-selection
+  -mass copy/paste/move/delete
+  -single rename/share/view + mass functions
+-draw generic file/directory icons (also app logo)
+-file info pages
+-bookmarks
+  -set default directory
