@@ -1,24 +1,23 @@
 package org.exasperation.FileManager;
 
-import android.view.MenuItem; 
-
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
-import android.widget.TextView;
-import android.content.Context;
-import android.view.ViewGroup;
-import android.view.LayoutInflater;
-import android.widget.ListView;
-import android.view.View;
 import android.app.AlertDialog;
-import android.widget.ArrayAdapter;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem; 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.ArrayAdapter;
 
 import android.app.ListActivity;
 import android.os.Bundle;
