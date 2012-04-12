@@ -95,6 +95,7 @@ public class FileBrowser extends ListActivity
             topMenu.setTitle(currentDirectory.getName() + DIR_DIVIDER);
         else
             topMenu.setTitle(ROOT_DIR);
+        topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
     }
 
     public void onListItemClick(ListView list, View view, int position, long id)
