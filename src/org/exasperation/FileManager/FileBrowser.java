@@ -48,8 +48,9 @@ public class FileBrowser extends ListActivity
     {
 
         super.onCreate(savedInstanceState);
-        browseTo(currentDirectory);
         topMenu = getActionBar();
+
+        browseTo(currentDirectory);
         Log.d(TAG, "hurrrr");
         topMenu.setHomeButtonEnabled(true);
     }
@@ -83,11 +84,6 @@ public class FileBrowser extends ListActivity
         }*/
     }
 
-    private void browseToRoot()
-    {
-        browseTo(new File(ROOT_DIR));
-    }
-
 	private void fill(File[] files) {
 		this.directoryEntries.clear();
 	    for (File file : files){
@@ -95,7 +91,10 @@ public class FileBrowser extends ListActivity
 	    }
 
         setListAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
-        
+        if (currentDirectory.getAbsolutePath() != ROOT_DIR)
+            topMenu.setTitle(currentDirectory.getName() + DIR_DIVIDER);
+        else
+            topMenu.setTitle(ROOT_DIR);
     }
 
     public void onListItemClick(ListView list, View view, int position, long id)
