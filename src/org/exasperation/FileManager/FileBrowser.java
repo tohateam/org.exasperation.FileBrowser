@@ -167,10 +167,11 @@ public class FileBrowser extends ListActivity
                             icon = matches.get(0).loadIcon(getPackageManager());
                             Log.d (TAG, "Icon set to Activity");
                         }
-                        else {
-                            //icon = generic file icon
-                        }
+                        else 
+                            icon = getResources().getDrawable(R.drawable.file);
                     }
+                    else
+                        icon = getResources().getDrawable(R.drawable.file);
                 }
 
                 fileIcon.setImageDrawable(icon);
