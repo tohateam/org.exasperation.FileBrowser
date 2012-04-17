@@ -2,7 +2,7 @@ The file manager Android (4.0+) should have shipped with
 
 TODO:
 
--add MIME based icons to file listings
+
 -display file sizes in meta field
 -selection
   -mass copy/paste/move/delete
