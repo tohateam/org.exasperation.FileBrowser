@@ -145,7 +145,9 @@ public class FileBrowser extends ListActivity
                     if (type != null) {
                         final Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.fromFile(o), type);
-    
+
+                        final ResolveInfo app = getPackageManager().resolveActivity(intent, 0);
+   /* 
                         final List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
     
                         if (matches.size() > 0)
@@ -154,7 +156,12 @@ public class FileBrowser extends ListActivity
                             //OR CAN WE????
                             //Yea we can't fuck you
                             icon = matches.get(0).loadIcon(getPackageManager());
+                            for (ResolveInfo match : matches)
+                                Log.d(TAG, ""+match.loadLabel(getPackageManager()));
                         }
+*/
+                        if (app != null)
+                            icon = app.loadIcon(getPackageManager());
                         else 
                             icon = getResources().getDrawable(R.drawable.file);
                     }
