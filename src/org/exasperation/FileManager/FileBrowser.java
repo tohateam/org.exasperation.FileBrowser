@@ -51,7 +51,6 @@ public class FileBrowser extends ListActivity
         topMenu = getActionBar();
 
         browseTo(currentDirectory);
-        Log.d(TAG, "hurrrr");
         topMenu.setHomeButtonEnabled(true);
     }
 
@@ -69,7 +68,6 @@ public class FileBrowser extends ListActivity
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.fromFile(aDirectory),URLConnection.guessContentTypeFromName(aDirectory.getName()));
-            Log.d(TAG, ""+Uri.fromFile(aDirectory));
             try {
                 startActivity(intent);
             }
@@ -103,14 +101,11 @@ public class FileBrowser extends ListActivity
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG, "Home button pressed");
         switch (item.getItemId()) {
             case android.R.id.home:
-                Log.d(TAG, "Home button recognized");
                 // app icon in action bar clicked; go up
                 if (currentDirectory.getParentFile() != null)
                 {
-                    Log.d(TAG, "Parent Directory valid");
                     browseTo(currentDirectory.getParentFile());
                 }
                 return true;
@@ -150,10 +145,8 @@ public class FileBrowser extends ListActivity
                     if (type != null) {
                         final Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.fromFile(o), type);
-                        Log.d (TAG, "Intent prepared: " + Uri.fromFile(o));
     
                         final List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-                        Log.d (TAG, "Found matches");
     
                         if (matches.size() > 0)
                         {
@@ -161,7 +154,6 @@ public class FileBrowser extends ListActivity
                             //OR CAN WE????
                             //Yea we can't fuck you
                             icon = matches.get(0).loadIcon(getPackageManager());
-                            Log.d (TAG, "Icon set to Activity");
                         }
                         else 
                             icon = getResources().getDrawable(R.drawable.file);
