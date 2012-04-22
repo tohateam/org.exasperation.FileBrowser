@@ -36,6 +36,7 @@ public class FileBrowser extends ListActivity
     public static final String DIR_DIVIDER = "/";
     public static final String ROOT_DIR = "/";
     public static final String DATE_FORMAT = "MMM d, yyyy";
+    public static final String TYPE_PLAINTEXT = "text/plain";
     
     String homeDirectory = "/sdcard/";
     File currentDirectory = new File(homeDirectory);
@@ -65,16 +66,33 @@ public class FileBrowser extends ListActivity
         }
         else
         {
-            Intent intent = new Intent();
+            String type = URLConnection.guessContentTypeFromName(aDirectory.getName());
+            final Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(aDirectory),URLConnection.guessContentTypeFromName(aDirectory.getName()));
-            try {
+            if (type == null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Unknown file type")
+                       .setMessage("Open as plaintext file instead?")
+                       .setCancelable(true)
+                       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog, int id) {
+                               intent.setDataAndType(Uri.fromFile(aDirectory),URLConnection.guessContentTypeFromName("hello.txt"));
+                               
+                               startActivity(intent);
+                           }
+                        })
+                       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog, int id) {
+                               dialog.cancel();
+                           }
+                       });
+                builder.create().show();
+            }
+            else {
+                intent.setDataAndType(Uri.fromFile(aDirectory),type);
+                Log.d(TAG, "opening as "+type);
                 startActivity(intent);
             }
-            catch (Exception e)
-            {
-            }
-
         }
     }
 
