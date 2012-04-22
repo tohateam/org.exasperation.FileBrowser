@@ -64,24 +64,20 @@ public class FileBrowser extends ListActivity
             Arrays.sort(fileList);
             fill(fileList);
         }
-        /*
         else
         {
-            OnClickListener okButtonListener = new OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                    // Lets start an intent to View the file, that was clicked...
-                    //openFile(aDirectory);
-                }
-            };
-            OnClickListener cancelButtonListener = new OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                    // Do nothing
-                }
-            };
-            AlertDialog.show(this,"Question", "Do you want to open that file?n" + aDirectory.getName(),
-                             "OK", okButtonListener,
-                             "Cancel", cancelButtonListener, false, null);
-        }*/
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(aDirectory),URLConnection.guessContentTypeFromName(aDirectory.getName()));
+            Log.d(TAG, ""+Uri.fromFile(aDirectory));
+            try {
+                startActivity(intent);
+            }
+            catch (Exception e)
+            {
+            }
+
+        }
     }
 
 	private void fill(File[] files) {
