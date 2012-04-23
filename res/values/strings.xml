@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">File Manager</string>
     <string name="up_one_level">..</string>
+    <string name="unknown_alert_title">Unknown file type</string>
+    <string name="open_as_text">Open as plain text file instead?</string>
 </resources>
