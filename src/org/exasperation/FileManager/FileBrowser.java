@@ -71,17 +71,17 @@ public class FileBrowser extends ListActivity
             intent.setAction(Intent.ACTION_VIEW);
             if (type == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Unknown file type")
-                       .setMessage("Open as plaintext file instead?")
+                builder.setTitle(getString(R.strings.unknown_alert_title))
+                       .setMessage(getString(R.strings.open_as_text))
                        .setCancelable(true)
-                       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                       .setPositiveButton(getString(R.id.yes), new DialogInterface.OnClickListener() {
                            public void onClick(DialogInterface dialog, int id) {
                                intent.setDataAndType(Uri.fromFile(aDirectory), TYPE_PLAINTEXT);
                                
                                startActivity(intent);
                            }
                         })
-                       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                       .setNegativeButton(getString(R.id.no), new DialogInterface.OnClickListener() {
                            public void onClick(DialogInterface dialog, int id) {
                                dialog.cancel();
                            }
