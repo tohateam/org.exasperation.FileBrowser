@@ -5,10 +5,8 @@ TODO:
 
 -display file sizes in meta field
 -selection
-  -mass copy/paste/move/delete
+  -mass copy/paste/cut/delete
   -single rename/share/view + mass functions
--draw generic file/directory icons (also app logo)
--file info pages
 -bookmarks
   -set default directory
 -show remaining/occupied space
