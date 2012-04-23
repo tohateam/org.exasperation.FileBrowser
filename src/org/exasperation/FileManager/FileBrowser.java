@@ -76,7 +76,7 @@ public class FileBrowser extends ListActivity
                        .setCancelable(true)
                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                            public void onClick(DialogInterface dialog, int id) {
-                               intent.setDataAndType(Uri.fromFile(aDirectory),URLConnection.guessContentTypeFromName("hello.txt"));
+                               intent.setDataAndType(Uri.fromFile(aDirectory), TYPE_PLAINTEXT);
                                
                                startActivity(intent);
                            }
