@@ -18,12 +18,15 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem; 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -31,7 +34,7 @@ import android.widget.TextView;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class FileBrowser extends Activity
+public class FileBrowser extends Activity implements ListView.OnItemClickListener, AbsListView.MultiChoiceModeListener
 {
     public static final String TAG = "org.exasperation.FileManager";
     public static final String DIR_DIVIDER = "/";
@@ -54,19 +57,54 @@ public class FileBrowser extends Activity
         setContentView(R.layout.browser);
         topMenu = getActionBar();
         lv = (ListView) findViewById(R.id.file_list);
-        lv.setOnItemClickListener(new ListView.OnItemClickListener() {
-            public void onItemClick(AdapterView list, View view, int position, long id)
-            {
-                String newPath = null;
-                newPath = currentDirectory.getAbsolutePath() + DIR_DIVIDER + directoryEntries.get(position).getName();
-                browseTo(new File(newPath));
-                Log.d(TAG, "clickyclicky");
-            }
-        });
+        lv.setOnItemClickListener(this);
+        lv.setMultiChoiceModeListener(this);
     
 
         browseTo(currentDirectory);
         topMenu.setHomeButtonEnabled(true);
+    }
+
+    public void onItemClick(AdapterView list, View view, int position, long id)
+    {
+        String newPath = null;
+        newPath = currentDirectory.getAbsolutePath() + DIR_DIVIDER + directoryEntries.get(position).getName();
+        browseTo(new File(newPath));
+        Log.d(TAG, "clickyclicky");
+    }
+    @Override
+    public void onItemCheckedStateChanged(ActionMode mode, int position,
+                                          long id, boolean checked) {
+        // Here you can do something when items are selected/de-selected,
+        // such as update the title in the CAB
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        // Respond to clicks on the actions in the CAB
+        switch (item.getItemId()) {
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        // Inflate the menu for the CAB
+        return true;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        // Here you can make any necessary updates to the activity when
+        // the CAB is removed. By default, selected items are deselected/unchecked.
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        // Here you can perform updates to the CAB due to
+        // an invalidate() request
+        return false;
     }
 
     private void browseTo(final File aDirectory)
