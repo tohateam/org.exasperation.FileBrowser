@@ -71,17 +71,17 @@ public class FileBrowser extends ListActivity
             intent.setAction(Intent.ACTION_VIEW);
             if (type == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.strings.unknown_alert_title))
-                       .setMessage(getString(R.strings.open_as_text))
+                builder.setTitle(getString(R.string.unknown_alert_title))
+                       .setMessage(getString(R.string.open_as_text))
                        .setCancelable(true)
-                       .setPositiveButton(getString(R.id.yes), new DialogInterface.OnClickListener() {
+                       .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                            public void onClick(DialogInterface dialog, int id) {
                                intent.setDataAndType(Uri.fromFile(aDirectory), TYPE_PLAINTEXT);
                                
                                startActivity(intent);
                            }
                         })
-                       .setNegativeButton(getString(R.id.no), new DialogInterface.OnClickListener() {
+                       .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                            public void onClick(DialogInterface dialog, int id) {
                                dialog.cancel();
                            }
