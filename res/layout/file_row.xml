@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="48dp"
     android:layout_width="match_parent"
+    android:background="?android:attr/activatedBackgroundIndicator"
 >
     <ImageView
         android:id="@+id/file_icon"
@@ -35,6 +36,6 @@
         android:singleLine="true"
         android:ellipsize="end"
         android:textSize="12sp"
-        android:textColor="#555555"
+        android:textColor="#999999"
     />
 </RelativeLayout>
