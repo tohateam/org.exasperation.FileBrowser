@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem; 
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +92,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         // Inflate the menu for the CAB
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(R.menu.single_selected_menu, menu);
         return true;
     }
 
