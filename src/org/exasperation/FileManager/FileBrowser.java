@@ -25,12 +25,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.os.Bundle;
 
-public class FileBrowser extends ListActivity
+public class FileBrowser extends Activity
 {
     public static final String TAG = "org.exasperation.FileManager";
     public static final String DIR_DIVIDER = "/";
@@ -38,6 +39,7 @@ public class FileBrowser extends ListActivity
     public static final String DATE_FORMAT = "MMM d, yyyy";
     public static final String TYPE_PLAINTEXT = "text/plain";
     
+    ListView lv = null;
     String homeDirectory = "/sdcard/";
     File currentDirectory = new File(homeDirectory);
     List<File> directoryEntries = new ArrayList<File>();
@@ -49,7 +51,19 @@ public class FileBrowser extends ListActivity
     {
 
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.browser);
         topMenu = getActionBar();
+        lv = (ListView) findViewById(R.id.file_list);
+        lv.setOnItemClickListener(new ListView.OnItemClickListener() {
+            public void onItemClick(AdapterView list, View view, int position, long id)
+            {
+                String newPath = null;
+                newPath = currentDirectory.getAbsolutePath() + DIR_DIVIDER + directoryEntries.get(position).getName();
+                browseTo(new File(newPath));
+                Log.d(TAG, "clickyclicky");
+            }
+        });
+    
 
         browseTo(currentDirectory);
         topMenu.setHomeButtonEnabled(true);
@@ -102,21 +116,15 @@ public class FileBrowser extends ListActivity
 	        this.directoryEntries.add(file);
 	    }
 
-        setListAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
+        lv.setAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
         if (currentDirectory.getAbsolutePath() != ROOT_DIR)
             topMenu.setTitle(currentDirectory.getName() + DIR_DIVIDER);
         else
             topMenu.setTitle(ROOT_DIR);
         topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
+        Log.d(TAG, "supsup");
     }
 
-    public void onListItemClick(ListView list, View view, int position, long id)
-    {
-        String newPath = null;
-        newPath = currentDirectory.getAbsolutePath() + DIR_DIVIDER + directoryEntries.get(position).getName();
-        browseTo(new File(newPath));
-    }
-    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
