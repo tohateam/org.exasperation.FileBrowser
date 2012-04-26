@@ -38,7 +38,6 @@ import android.os.Bundle;
 public class FileBrowser extends Activity implements ListView.OnItemClickListener, AbsListView.MultiChoiceModeListener
 {
     public static final String TAG = "org.exasperation.FileManager";
-    public static final String DIR_DIVIDER = "/";
     public static final String ROOT_DIR = "/";
     public static final String DATE_FORMAT = "MMM d, yyyy";
     public static final String TYPE_PLAINTEXT = "text/plain";
@@ -86,7 +85,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     public void onItemClick(AdapterView list, View view, int position, long id)
     {
         String newPath = null;
-        newPath = currentDirectory.getAbsolutePath() + DIR_DIVIDER + directoryEntries.get(position).getName();
+        newPath = currentDirectory.getAbsolutePath() + File.pathSeparator + directoryEntries.get(position).getName();
         browseTo(new File(newPath));
         Log.d(TAG, "clickyclicky");
     }
@@ -135,6 +134,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // an invalidate() request
         return false;
     }
+    
+    private void rename(final File)
 
     private void browseTo(final File aDirectory)
     {
@@ -185,7 +186,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
         lv.setAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
         if (currentDirectory.getAbsolutePath() != ROOT_DIR)
-            topMenu.setTitle(currentDirectory.getName() + DIR_DIVIDER);
+            topMenu.setTitle(currentDirectory.getName() + File.pathSeparator);
         else
             topMenu.setTitle(ROOT_DIR);
         topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
