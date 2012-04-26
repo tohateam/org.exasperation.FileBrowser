@@ -46,6 +46,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     ListView lv = null;
     String homeDirectory = "/sdcard/";
     File currentDirectory = new File(homeDirectory);
+    List<int> selectedItems = new ArrayList<int>();
     List<File> directoryEntries = new ArrayList<File>();
     ActionBar topMenu = null;
 
@@ -77,7 +78,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     public void onItemCheckedStateChanged(ActionMode mode, int position,
                                           long id, boolean checked) {
         // Here you can do something when items are selected/de-selected,
-        // such as update the title in the CAB
+        // such as update the title in the 
+        if (checked) {
+            if (!selectedItems.contains(id))
+            	selectedItems.add(id);
+        } else {
+            if (selectedItems.contains(id))
+            	selectedItems.remove(selectedItems.indexOf(id));
+        }
     }
 
     @Override
@@ -101,6 +109,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     public void onDestroyActionMode(ActionMode mode) {
         // Here you can make any necessary updates to the activity when
         // the CAB is removed. By default, selected items are deselected/unchecked.
+        selectedItems.clear();
     }
 
     @Override
