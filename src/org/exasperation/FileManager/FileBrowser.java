@@ -67,6 +67,22 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         topMenu.setHomeButtonEnabled(true);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go up
+                if (currentDirectory.getParentFile() != null)
+                {
+                    browseTo(currentDirectory.getParentFile());
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onItemClick(AdapterView list, View view, int position, long id)
     {
         String newPath = null;
@@ -74,6 +90,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         browseTo(new File(newPath));
         Log.d(TAG, "clickyclicky");
     }
+    
     @Override
     public void onItemCheckedStateChanged(ActionMode mode, int position,
                                           long id, boolean checked) {
@@ -173,21 +190,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             topMenu.setTitle(ROOT_DIR);
         topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
         Log.d(TAG, "supsup");
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; go up
-                if (currentDirectory.getParentFile() != null)
-                {
-                    browseTo(currentDirectory.getParentFile());
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private class FileAdapter extends ArrayAdapter<File> {
