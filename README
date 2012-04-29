@@ -5,8 +5,8 @@ TODO:
 
 -display file sizes in meta field
 -selection
-  -mass copy/paste/cut/delete
-  -single rename/share/view + mass functions
+  -mass copy/paste/cut
+  -single share/view + mass functions
 -bookmarks
   -set default directory
 -show remaining/occupied space
