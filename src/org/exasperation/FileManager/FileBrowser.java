@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView;
@@ -45,14 +46,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     ListView lv = null;
     String homeDirectory = "/sdcard/";
     File currentDirectory = new File(homeDirectory);
-    List<int> selectedItems = new ArrayList<int>();
+    List<Integer> selectedItems = new ArrayList<Integer>();
     List<File> directoryEntries = new ArrayList<File>();
     ActionBar topMenu = null;
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        Log.d(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser);
@@ -68,6 +69,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected()");
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; go up
@@ -84,30 +86,34 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onItemClick(AdapterView list, View view, int position, long id)
     {
+        Log.d(TAG, "onItemClick()");
         String newPath = null;
-        newPath = currentDirectory.getAbsolutePath() + File.pathSeparator + directoryEntries.get(position).getName();
+        newPath = currentDirectory.getAbsolutePath() + File.separator + directoryEntries.get(position).getName();
         browseTo(new File(newPath));
-        Log.d(TAG, "clickyclicky");
     }
     
     @Override
     public void onItemCheckedStateChanged(ActionMode mode, int position,
                                           long id, boolean checked) {
+        Log.d(TAG, "onItemCheckedStateChanged()");
         // Here you can do something when items are selected/de-selected,
         // such as update the title in the 
         if (checked) {
-            if (!selectedItems.contains(id))
-            	selectedItems.add(id);
+            if (!selectedItems.contains(position))
+                selectedItems.add(position);
         } else {
-            if (selectedItems.contains(id))
-            	selectedItems.remove(selectedItems.indexOf(id));
+            if (selectedItems.contains(position))
+                selectedItems.remove(selectedItems.indexOf(position));
         }
     }
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        Log.d(TAG, "onActionItemClicked()");
         // Respond to clicks on the actions in the CAB
         switch (item.getItemId()) {
+            case R.id.menu_rename:
+                renameSelection();
             default:
                 return false;
         }
@@ -115,6 +121,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        Log.d(TAG, "onCreateActionMode()");
         // Inflate the menu for the CAB
         MenuInflater inflater = mode.getMenuInflater();
         inflater.inflate(R.menu.single_selected_menu, menu);
@@ -123,6 +130,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public void onDestroyActionMode(ActionMode mode) {
+        Log.d(TAG, "onDestroyActionMode()");
         // Here you can make any necessary updates to the activity when
         // the CAB is removed. By default, selected items are deselected/unchecked.
         selectedItems.clear();
@@ -130,12 +138,38 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        Log.d(TAG, "onPrepareActionMode()");
         // Here you can perform updates to the CAB due to
         // an invalidate() request
         return false;
     }
     
-    private void rename(final File)
+    private void renameSelection() {
+        Log.d(TAG, "renameSelection()");
+        for (final Integer i : selectedItems) {
+            final EditText nameEditor = new EditText(getApplicationContext());
+            nameEditor.selectAll();
+            nameEditor.setText(directoryEntries.get(i).getName());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Rename file")
+                   .setView(nameEditor)
+                   .setCancelable(true)
+                   .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int id) {
+                           if (directoryEntries.get(i)
+                                                .renameTo(new File(currentDirectory, nameEditor.getText()
+                                                .toString())))
+                               Log.d(TAG, "renameSelection(): rename successful!");
+                       }
+                   })
+                   .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int id) {
+                           dialog.cancel();
+                       }
+                   });
+            builder.create().show();
+        }
+    }
 
     private void browseTo(final File aDirectory)
     {
@@ -186,11 +220,10 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
         lv.setAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
         if (currentDirectory.getAbsolutePath() != ROOT_DIR)
-            topMenu.setTitle(currentDirectory.getName() + File.pathSeparator);
+            topMenu.setTitle(currentDirectory.getName() + File.separator);
         else
             topMenu.setTitle(ROOT_DIR);
         topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
-        Log.d(TAG, "supsup");
     }
 
     private class FileAdapter extends ArrayAdapter<File> {
