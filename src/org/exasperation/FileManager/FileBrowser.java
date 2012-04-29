@@ -136,9 +136,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         Log.d(TAG, "onActionItemClicked()");
         // Respond to clicks on the actions in the CAB
+
         switch (item.getItemId()) {
             case R.id.menu_rename:
                 rename(selectedEntries.get(0));
+            case R.id.menu_delete:
+                delete(selectedEntries);
+
+            //applies to all valid cases
                 mode.finish();
                 return true;
             default:
@@ -151,7 +156,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         Log.d(TAG, "onDestroyActionMode()");
         // Here you can make any necessary updates to the activity when
         // the CAB is removed. By default, selected items are deselected/unchecked.
-        selectedEntries.clear();
     }
 
     private void rename(final File file) {
@@ -160,7 +164,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         nameEditor.selectAll();
         nameEditor.setText(file.getName());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Rename file")
+        builder.setTitle(getString(R.string.rename_file))
                .setView(nameEditor)
                .setCancelable(true)
                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -168,11 +172,39 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString())))
                            Log.d(TAG, "renameSelection(): rename successful!");
                        fill(currentDirectory.listFiles());
+                       selectedEntries.clear();
                    }
                })
                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
                        dialog.cancel();
+                       selectedEntries.clear();
+                   }
+               });
+        builder.create().show();
+    }
+
+    private void delete(final List<File> files)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.delete_file))
+               .setMessage(getString(R.string.confirm_delete))
+               .setCancelable(true)
+               .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       for (File file : files)
+                           if (file.delete())
+                               Log.d(TAG, "delete successful");
+                           else if (file == null)
+                               Log.d(TAG, "file is null");
+                       fill(currentDirectory.listFiles());
+                       selectedEntries.clear();
+                   }
+               })
+               .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       dialog.cancel();
+                       selectedEntries.clear();
                    }
                });
         builder.create().show();
