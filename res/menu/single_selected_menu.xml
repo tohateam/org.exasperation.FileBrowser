@@ -5,7 +5,7 @@
           android:title="@string/rename"
           android:showAsAction="ifRoom"
     />
-    <item andriod:id="@+id/menu_share"
+    <item android:id="@+id/menu_share"
           android:icon="@drawable/share"
           android:title="@string/share"
           android:showAsAction="ifRoom"
