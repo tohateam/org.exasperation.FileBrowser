@@ -91,7 +91,29 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         newPath = currentDirectory.getAbsolutePath() + File.separator + directoryEntries.get(position).getName();
         browseTo(new File(newPath));
     }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        Log.d(TAG, "onCreateActionMode()");
+        // Inflate the menu for the CAB
+        return true;
+    }
     
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        Log.d(TAG, "onPrepareActionMode()");
+        // Here you can perform updates to the CAB due to
+        // an invalidate() request
+        menu.clear();
+
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(R.menu.general_menu, menu);
+        if (selectedEntries.size() < 2)
+            inflater.inflate(R.menu.single_selected_menu, menu);
+
+        return false;
+    }
+
     @Override
     public void onItemCheckedStateChanged(ActionMode mode, int position,
                                           long id, boolean checked) {
@@ -100,9 +122,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // such as update the title in the 
         if (checked) {
             selectedEntries.add(directoryEntries.get(position));
+            if (selectedEntries.size() == 2) // invalidate if size went from ==1 to ==2
+                mode.invalidate();
         } else {
-            selectedEntries.remove(selectedEntries.indexOf(directorEntries.get(position)));
+            selectedEntries.remove(selectedEntries.indexOf(directoryEntries.get(position)));
+            if (selectedEntries.size() == 1) // invalidate if size went from >1 to ==1
+                mode.invalidate();
         }
+
     }
 
     @Override
@@ -111,19 +138,12 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // Respond to clicks on the actions in the CAB
         switch (item.getItemId()) {
             case R.id.menu_rename:
-                rename();
+                rename(selectedEntries.get(0));
+                mode.finish();
+                return true;
             default:
                 return false;
         }
-    }
-
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        Log.d(TAG, "onCreateActionMode()");
-        // Inflate the menu for the CAB
-        MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.single_selected_menu, menu);
-        return true;
     }
 
     @Override
@@ -134,37 +154,28 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         selectedEntries.clear();
     }
 
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        Log.d(TAG, "onPrepareActionMode()");
-        // Here you can perform updates to the CAB due to
-        // an invalidate() request
-        return false;
-    }
-    
-    private void rename() {
-        Log.d(TAG, "renameSelection()");
-        for (final File file : selectedEntries) {
-            final EditText nameEditor = new EditText(getApplicationContext());
-            nameEditor.selectAll();
-            nameEditor.setText(file.getName());
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Rename file")
-                   .setView(nameEditor)
-                   .setCancelable(true)
-                   .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                       public void onClick(DialogInterface dialog, int id) {
-                           if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString())))
-                               Log.d(TAG, "renameSelection(): rename successful!");
-                       }
-                   })
-                   .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                       public void onClick(DialogInterface dialog, int id) {
-                           dialog.cancel();
-                       }
-                   });
-            builder.create().show();
-        }
+    private void rename(final File file) {
+        Log.d(TAG, "rename()");
+        final EditText nameEditor = new EditText(getApplicationContext());
+        nameEditor.selectAll();
+        nameEditor.setText(file.getName());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Rename file")
+               .setView(nameEditor)
+               .setCancelable(true)
+               .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString())))
+                           Log.d(TAG, "renameSelection(): rename successful!");
+                       fill(currentDirectory.listFiles());
+                   }
+               })
+               .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       dialog.cancel();
+                   }
+               });
+        builder.create().show();
     }
 
     private void browseTo(final File aDirectory)
@@ -173,9 +184,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         if (aDirectory.isDirectory())
         {
             currentDirectory = aDirectory;
-            File[] fileList = currentDirectory.listFiles();
-            Arrays.sort(fileList);
-            fill(fileList);
+            fill(currentDirectory.listFiles());
         }
         else
         {
@@ -212,6 +221,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
 	private void fill(File[] files) {
         Log.d(TAG, "fill()");
+        Arrays.sort(files);
 		this.directoryEntries.clear();
 	    for (File file : files){
 	        this.directoryEntries.add(file);
