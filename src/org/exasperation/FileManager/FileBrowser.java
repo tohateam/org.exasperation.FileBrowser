@@ -46,7 +46,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     ListView lv = null;
     String homeDirectory = "/sdcard/";
     File currentDirectory = new File(homeDirectory);
-    List<Integer> selectedItems = new ArrayList<Integer>();
+    List<File> selectedEntries = new ArrayList<File>();
     List<File> directoryEntries = new ArrayList<File>();
     ActionBar topMenu = null;
 
@@ -99,11 +99,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // Here you can do something when items are selected/de-selected,
         // such as update the title in the 
         if (checked) {
-            if (!selectedItems.contains(position))
-                selectedItems.add(position);
+            selectedEntries.add(directoryEntries.get(position));
         } else {
-            if (selectedItems.contains(position))
-                selectedItems.remove(selectedItems.indexOf(position));
+            selectedEntries.remove(selectedEntries.indexOf(directorEntries.get(position)));
         }
     }
 
@@ -113,7 +111,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // Respond to clicks on the actions in the CAB
         switch (item.getItemId()) {
             case R.id.menu_rename:
-                renameSelection();
+                rename();
             default:
                 return false;
         }
@@ -133,7 +131,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         Log.d(TAG, "onDestroyActionMode()");
         // Here you can make any necessary updates to the activity when
         // the CAB is removed. By default, selected items are deselected/unchecked.
-        selectedItems.clear();
+        selectedEntries.clear();
     }
 
     @Override
@@ -144,21 +142,19 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         return false;
     }
     
-    private void renameSelection() {
+    private void rename() {
         Log.d(TAG, "renameSelection()");
-        for (final Integer i : selectedItems) {
+        for (final File file : selectedEntries) {
             final EditText nameEditor = new EditText(getApplicationContext());
             nameEditor.selectAll();
-            nameEditor.setText(directoryEntries.get(i).getName());
+            nameEditor.setText(file.getName());
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Rename file")
                    .setView(nameEditor)
                    .setCancelable(true)
                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                        public void onClick(DialogInterface dialog, int id) {
-                           if (directoryEntries.get(i)
-                                                .renameTo(new File(currentDirectory, nameEditor.getText()
-                                                .toString())))
+                           if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString())))
                                Log.d(TAG, "renameSelection(): rename successful!");
                        }
                    })
@@ -213,8 +209,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
     }
 
+
 	private void fill(File[] files) {
-        Log.d(TAG, "fill");
+        Log.d(TAG, "fill()");
 		this.directoryEntries.clear();
 	    for (File file : files){
 	        this.directoryEntries.add(file);
