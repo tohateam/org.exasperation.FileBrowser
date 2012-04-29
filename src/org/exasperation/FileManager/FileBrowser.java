@@ -173,6 +173,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     private void browseTo(final File aDirectory)
     {
+        Log.d(TAG, "browseTo()");
         if (aDirectory.isDirectory())
         {
             currentDirectory = aDirectory;
@@ -213,6 +214,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     }
 
 	private void fill(File[] files) {
+        Log.d(TAG, "fill");
 		this.directoryEntries.clear();
 	    for (File file : files){
 	        this.directoryEntries.add(file);
