@@ -165,8 +165,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     private void rename(final File file) {
         Log.d(TAG, "rename()");
         final EditText nameEditor = new EditText(getApplicationContext());
-        nameEditor.selectAll();
         nameEditor.setText(file.getName());
+        nameEditor.selectAll();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.rename_file))
                .setView(nameEditor)
