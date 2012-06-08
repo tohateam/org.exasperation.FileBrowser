@@ -180,7 +180,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
                        dialog.cancel();
-                       selectedEntries.clear();
                    }
                });
         builder.create().show();
