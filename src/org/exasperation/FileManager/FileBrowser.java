@@ -35,6 +35,8 @@ import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import org.apache.commons.io.FileUtils;
+
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -357,31 +359,19 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             Log.d(TAG, "showing...");
             
         }
-        private void deleteRecursively(final List<File> files)
-        {
-            for (File file : files)
-            {
-                if (file.isDirectory())
-                {
-                    deleteRecursively(new ArrayList<File>(Arrays.asList(file.listFiles())));
-                    if (file.delete())
-                        Log.d(TAG, "delete successful");
-                    else if (file == null)
-                        Log.d(TAG, "file is null");
-                }
-                else
-                {
-                    if (file.delete())
-                        Log.d(TAG, "delete successful");
-                    else if (file == null)
-                        Log.d(TAG, "file is null");
-                }
-            }
-        }
-    
         protected Boolean doInBackground(File... files) {
-            deleteRecursively(new ArrayList<File>(Arrays.asList(files)));
-            
+            for (int i = 0; i < files.length; i++)
+            {
+                if (files[i].isDirectory())
+                    try{
+                        FileUtils.deleteDirectory(files[i]);
+                    }
+                    catch(Exception e)
+                    {}
+                else
+                    files[i].delete();
+            }
+
             return true; 
         }
         protected void onPostExecute(Boolean result) {
