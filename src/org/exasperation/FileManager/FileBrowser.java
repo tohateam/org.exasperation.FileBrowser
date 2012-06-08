@@ -1,5 +1,6 @@
 package org.exasperation.FileManager;
 import java.io.File;
+import java.lang.Runtime;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         Log.d(TAG, "onCreateActionMode()");
+        selectedEntries.clear();
         // Inflate the menu for the CAB
         return true;
     }
@@ -199,6 +201,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
                        dialog.cancel();
+                       try {
+                       Runtime.getRuntime().exec("touch /sdcard/harbrabr");
+                       }
+                       catch (Exception e)
+                       {}
                    }
                });
         builder.create().show();
