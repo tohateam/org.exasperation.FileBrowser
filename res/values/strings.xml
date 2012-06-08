@@ -3,7 +3,7 @@
     <string name="app_name">File Manager</string>
     <string name="up_one_level">..</string>
     <string name="unknown_alert_title">Unknown file type</string>
-    <string name="open_as_text">Open as plain text file instead?</string>
+    <string name="open_as_text">Open as a plain text file?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">Okay</string>

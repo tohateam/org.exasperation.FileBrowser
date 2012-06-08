@@ -142,10 +142,10 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         switch (item.getItemId()) {
             case R.id.menu_rename:
                 rename(selectedEntries.get(0));
+                mode.finish();
+                return true;
             case R.id.menu_delete:
                 delete(selectedEntries);
-
-            //applies to all valid cases
                 mode.finish();
                 return true;
             default:
