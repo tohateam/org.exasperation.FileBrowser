@@ -1,5 +1,4 @@
 package org.exasperation.FileManager;
-
 import java.io.File;
 import java.net.URLConnection;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import android.app.ProgressDialog;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     
     ListView lv = null;
     String homeDirectory = "/sdcard/";
+    Context c = this;
     File currentDirectory = new File(homeDirectory);
     List<File> selectedEntries = new ArrayList<File>();
     List<File> directoryEntries = new ArrayList<File>();
@@ -192,19 +194,12 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                .setCancelable(true)
                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
-                       for (File file : files)
-                           if (file.delete())
-                               Log.d(TAG, "delete successful");
-                           else if (file == null)
-                               Log.d(TAG, "file is null");
-                       fill(currentDirectory.listFiles());
-                       selectedEntries.clear();
+                       new DeleteTask(c).execute(files.toArray(new File[1]));
                    }
                })
                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
                        dialog.cancel();
-                       selectedEntries.clear();
                    }
                });
         builder.create().show();
@@ -336,4 +331,58 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             return v;
         }
     }
+    private class DeleteTask extends AsyncTask<File, Void, Boolean> {
+        public static final String TAG = "org.exasperation.FileManager";
+        ProgressDialog dialog;
+        boolean success = true;
+        Context c;
+        public DeleteTask(Context context) {
+            c = context;
+        }
+
+        protected void onPreExecute() {
+            
+            dialog = new ProgressDialog(c);
+            Log.d(TAG,"setup complete");
+            dialog.setTitle("Deleting files");
+            dialog.setMessage("Please wait...");
+            dialog.setIndeterminate(true);
+            dialog.show();
+            Log.d(TAG, "showing...");
+            
+        }
+        private void deleteRecursively(final List<File> files)
+        {
+            for (File file : files)
+            {
+                if (file.isDirectory())
+                {
+                    deleteRecursively(new ArrayList<File>(Arrays.asList(file.listFiles())));
+                    if (file.delete())
+                        Log.d(TAG, "delete successful");
+                    else if (file == null)
+                        Log.d(TAG, "file is null");
+                }
+                else
+                {
+                    if (file.delete())
+                        Log.d(TAG, "delete successful");
+                    else if (file == null)
+                        Log.d(TAG, "file is null");
+                }
+            }
+        }
+    
+        protected Boolean doInBackground(File... files) {
+            deleteRecursively(new ArrayList<File>(Arrays.asList(files)));
+            
+            return true; 
+        }
+        protected void onPostExecute(Boolean result) {
+            dialog.dismiss();
+            fill(currentDirectory.listFiles());
+            selectedEntries.clear();
+        }
+    }
 }
+
