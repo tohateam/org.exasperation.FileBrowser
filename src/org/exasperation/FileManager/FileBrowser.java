@@ -50,7 +50,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     ListView lv = null;
     String homeDirectory = "/sdcard/";
     Context c = this;
-    File currentDirectory = new File(homeDirectory);
+    File currentDirectory = null;
     List<File> selectedEntries = new ArrayList<File>();
     List<File> directoryEntries = new ArrayList<File>();
     ActionBar topMenu = null;
@@ -64,6 +64,20 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         setContentView(R.layout.browser);
         topMenu = getActionBar();
         lv = (ListView) findViewById(R.id.file_list);
+
+        if (savedInstanceState == null)
+        {
+            currentDirectory = new File(homeDirectory);
+        }
+        else
+        {
+            currentDirectory = new File(savedInstanceState.getString("savedPath"));
+            int savedPosition = savedInstanceState.getInt("savedPosition");
+            int savedListTop = savedInstanceState.getInt("savedListTop");
+            if (savedPosition >= 0)
+                lv.setSelectionFromTop(savedPosition, savedListTop);
+        }
+
     }
 
     @Override
@@ -116,6 +130,13 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         Log.d(TAG, "onSaveInstanceState()");
 
         super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putString("savedPath", currentDirectory.getAbsolutePath());
+        int savedPosition = -1;
+        savedPosition = lv.getFirstVisiblePosition();
+        savedInstanceState.putInt("savedPosition", savedPosition);
+        View firstVisibleView = lv.getChildAt(0);
+        savedInstanceState.putInt("savedListTop", (firstVisibleView == null) ? 0 : firstVisibleView.getTop());
     }
 
     @Override
