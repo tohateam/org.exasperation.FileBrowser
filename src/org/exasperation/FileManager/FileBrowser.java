@@ -141,7 +141,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         savedInstanceState.putInt("savedPosition", savedPosition);
         View firstVisibleView = lv.getChildAt(0);
         savedInstanceState.putInt("savedListTop", (firstVisibleView == null) ? 0 : firstVisibleView.getTop());
-        
     }
 
     @Override
