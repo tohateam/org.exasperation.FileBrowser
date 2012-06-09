@@ -47,12 +47,16 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     public static final String DATE_FORMAT = "MMM d, yyyy";
     public static final String TYPE_PLAINTEXT = "text/plain";
     
+    public enum ClipType { EMPTY, COPY, CUT };
+
     ListView lv = null;
     String homeDirectory = "/sdcard/";
     Context c = this;
     File currentDirectory = null;
     List<File> selectedEntries = new ArrayList<File>();
     List<File> directoryEntries = new ArrayList<File>();
+    List<File> clipboardEntries = new ArrayList<File>();
+    ClipType clipboardType = ClipType.EMPTY;
     ActionBar topMenu = null;
 
     @Override
@@ -148,6 +152,16 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        Log.d(TAG, "onPrepareOptionsMenu()" + clipboardType);
+        MenuInflater inflater = getMenuInflater();
+        if (clipboardType != ClipType.EMPTY)
+            inflater.inflate(R.menu.paste_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected()");
         switch (item.getItemId()) {
@@ -157,6 +171,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 {
                     browseTo(currentDirectory.getParentFile());
                 }
+                return true;
+            case R.id.menu_paste:
+                paste(currentDirectory);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -227,6 +244,18 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 delete(selectedEntries);
                 mode.finish();
                 return true;
+            case R.id.menu_copy:
+                clipboardType = ClipType.COPY;
+                clip(selectedEntries);
+                invalidateOptionsMenu();
+                mode.finish();
+                return true;
+            case R.id.menu_cut:
+                clipboardType = ClipType.CUT;
+                clip(selectedEntries);
+                invalidateOptionsMenu();
+                mode.finish();
+                return true;
             default:
                 return false;
         }
@@ -238,6 +267,53 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // Here you can make any necessary updates to the activity when
         // the CAB is removed. By default, selected items are deselected/unchecked.
     }
+
+    private void clip(final List<File> files)
+    {
+        for (File file : files)
+        {
+            clipboardEntries.add(file.getAbsoluteFile());
+        }
+    }
+
+    private void paste(final File directory)
+    {
+        if (clipboardType == ClipType.CUT)
+        {
+            for (File file : clipboardEntries)
+            {
+                try{
+                    if (file.isDirectory())
+                        FileUtils.moveDirectoryToDirectory(file, directory, false);
+                    else
+                        FileUtils.moveFileToDirectory(file, directory, false);
+                }
+                catch (Exception e)
+                {}
+            }
+            clipboardEntries.clear();
+            clipboardType = ClipType.EMPTY;
+        }
+        else if (clipboardType == ClipType.COPY)
+        {
+            for (File file : clipboardEntries)
+            {
+                try{
+                    if (file.isDirectory())
+                        FileUtils.copyDirectoryToDirectory(file, directory);
+                    else
+                        FileUtils.copyFileToDirectory(file, directory);
+                }
+                catch (Exception e)
+                {}
+            }
+        }
+        else
+            return;
+        fill(currentDirectory.listFiles());
+    }
+
+
 
     private void rename(final File file) {
         Log.d(TAG, "rename()");
@@ -253,7 +329,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString())))
                            Log.d(TAG, "renameSelection(): rename successful!");
                        fill(currentDirectory.listFiles());
-                       selectedEntries.clear();
                    }
                })
                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -452,7 +527,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
             fill(currentDirectory.listFiles());
-            selectedEntries.clear();
         }
     }
 }
