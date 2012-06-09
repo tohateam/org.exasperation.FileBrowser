@@ -141,6 +141,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         savedInstanceState.putInt("savedPosition", savedPosition);
         View firstVisibleView = lv.getChildAt(0);
         savedInstanceState.putInt("savedListTop", (firstVisibleView == null) ? 0 : firstVisibleView.getTop());
+        
     }
 
     @Override
@@ -174,6 +175,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 return true;
             case R.id.menu_paste:
                 paste(currentDirectory);
+                invalidateOptionsMenu();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -264,6 +266,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onDestroyActionMode(ActionMode mode) {
         Log.d(TAG, "onDestroyActionMode()");
+
+        selectedEntries.clear();
         // Here you can make any necessary updates to the activity when
         // the CAB is removed. By default, selected items are deselected/unchecked.
     }
@@ -315,8 +319,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
 
 
-    private void rename(final File file) {
-        Log.d(TAG, "rename()");
+    private void rename(final File selected) {
+        final File file = selected.getAbsoluteFile();
         final EditText nameEditor = new EditText(getApplicationContext());
         nameEditor.setText(file.getName());
         nameEditor.selectAll();
@@ -339,8 +343,13 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         builder.create().show();
     }
 
-    private void delete(final List<File> files)
+    private void delete(final List<File> selected)
     {
+        Log.d(TAG, "delete()");
+        final List<File> files = new ArrayList<File>();
+        for (File file : selected)
+            files.add(file);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.delete_file))
                .setMessage(getString(R.string.confirm_delete))
