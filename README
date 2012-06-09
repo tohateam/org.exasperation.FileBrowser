@@ -1,12 +1,16 @@
 The file manager Android (4.0+) should have shipped with
 
-TODO:
+TODO (in order of complexity):
 
-
+-application icon
+-new navigate up arrow
+-save selection/clipboard/clipboardtype onSaveInstanceState
+-share
+-sort folder first
+-new folder
+-new plaintext file
 -display file sizes in meta field
--selection
-  -mass copy/paste/cut
-  -single share/view + mass functions
 -bookmarks
   -set default directory
+-folder tree dropddown navigation
 -show remaining/occupied space
