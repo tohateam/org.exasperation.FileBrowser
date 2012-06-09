@@ -64,12 +64,66 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         setContentView(R.layout.browser);
         topMenu = getActionBar();
         lv = (ListView) findViewById(R.id.file_list);
+    }
+
+    @Override
+    public void onStart()
+    {
+        Log.d(TAG, "onStart()");
+
+        super.onStart();
         lv.setOnItemClickListener(this);
         lv.setMultiChoiceModeListener(this);
-    
-
         browseTo(currentDirectory);
         topMenu.setHomeButtonEnabled(true);
+    }
+
+    @Override
+    public void onResume()
+    {
+        Log.d(TAG, "onResume()");
+
+        super.onResume();
+    }
+
+    @Override
+    public void onPause()
+    {
+        Log.d(TAG, "onPause()");
+
+        super.onPause();
+    }
+
+    @Override
+    public void onStop()
+    {
+        Log.d(TAG, "onStop()");
+
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        Log.d(TAG, "onDestroy()");
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+        Log.d(TAG, "onSaveInstanceState()");
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        Log.d(TAG, "onRestoreInstanceState()");
+
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
