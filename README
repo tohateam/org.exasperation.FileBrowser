@@ -4,10 +4,8 @@ TODO (in order of complexity):
 
 
 -make application icon
--make new navigate up arrow
 -fix FC on opening protected folders
 -show toast notifications to user
--save selection/clipboard/clipboardtype onSaveInstanceState
 -implement sharing
 -sort folder first
 -allow new folder/file creation
@@ -16,3 +14,13 @@ TODO (in order of complexity):
   -set default directory
 -include folder tree dropddown navigation
 -show remaining/occupied space
+
+DONE:
+
+
+2012/6/12
+-make new navigate up arrow
+
+2012/6/11
+-save selection/clipboard/clipboardtype onSaveInstanceState
+
