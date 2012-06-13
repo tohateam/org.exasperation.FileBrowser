@@ -4,8 +4,6 @@ TODO (in order of complexity):
 
 
 -make application icon
--show toast notifications to user
--implement sharing
 -sort folder first
 -allow new folder/file creation
 -display file sizes in meta field
@@ -20,6 +18,8 @@ DONE:
 2012/6/12
 -make new navigate up arrow
 -fix FC on opening protected folders
+-show toast notifications to user
+-implement sharing
 
 2012/6/11
 -save selection/clipboard/clipboardtype onSaveInstanceState
