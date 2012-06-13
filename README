@@ -4,7 +4,6 @@ TODO (in order of complexity):
 
 
 -make application icon
--sort folder first
 -allow new folder/file creation
 -display file sizes in meta field
 -implement bookmarks
@@ -16,6 +15,7 @@ DONE:
 
 
 2012/6/12
+-sort folder first
 -make new navigate up arrow
 -fix FC on opening protected folders
 -show toast notifications to user

@@ -1,5 +1,7 @@
 package org.exasperation.FileManager;
+
 import java.io.File;
+import java.io.FileFilter;
 import java.lang.Runtime;
 import java.net.URLConnection;
 import java.util.List;
@@ -337,7 +339,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         else
             return;
-        fill(currentDirectory.listFiles());
+        fill();
     }
 
 
@@ -355,7 +357,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                    public void onClick(DialogInterface dialog, int id) {
                        if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString())))
                            Log.d(TAG, "renameSelection(): rename successful!");
-                       fill(currentDirectory.listFiles());
+                       fill();
                    }
                })
                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -398,7 +400,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             if (aDirectory.canRead() && aDirectory.canExecute())
             {
                 currentDirectory = aDirectory;
-                fill(currentDirectory.listFiles());
+                fill();
             }
             else
             {
@@ -439,10 +441,16 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     }
 
 
-	private void fill(File[] files) {
+	private void fill() {
         Log.d(TAG, "fill()");
+        final File[] directories = currentDirectory.listFiles(new DirectoryFilter());
+        final File[] files = currentDirectory.listFiles(new NoDirectoryFilter());
+        Arrays.sort(directories);
         Arrays.sort(files);
 		this.directoryEntries.clear();
+	    for (File file : directories){
+	        this.directoryEntries.add(file);
+	    }
 	    for (File file : files){
 	        this.directoryEntries.add(file);
 	    }
@@ -568,7 +576,17 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
-            fill(currentDirectory.listFiles());
+            fill();
+        }
+    }
+    private class DirectoryFilter implements FileFilter {
+        public boolean accept (File file) {
+            return file.isDirectory();
+        }
+    }
+    private class NoDirectoryFilter implements FileFilter {
+        public boolean accept (File file) {
+            return !file.isDirectory();
         }
     }
 }
