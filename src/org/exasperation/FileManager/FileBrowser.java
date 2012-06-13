@@ -361,11 +361,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
                        dialog.cancel();
-                       try {
-                       Runtime.getRuntime().exec("touch /sdcard/harbrabr");
-                       }
-                       catch (Exception e)
-                       {}
                    }
                });
         builder.create().show();
