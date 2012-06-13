@@ -93,7 +93,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         lv.setOnItemClickListener(this);
         lv.setMultiChoiceModeListener(this);
         browseTo(currentDirectory);
-        topMenu.setHomeButtonEnabled(true);
     }
 
     @Override
@@ -441,10 +440,17 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
         lv.setAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
         if (currentDirectory.getAbsolutePath() != ROOT_DIR)
+        {
             topMenu.setTitle(currentDirectory.getName() + File.separator);
+            topMenu.setHomeButtonEnabled(true);
+        }
         else
+        {
             topMenu.setTitle(ROOT_DIR);
+            topMenu.setHomeButtonEnabled(false);
+        }
         topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
+        invalidateOptionsMenu();
     }
 
     private class FileAdapter extends ArrayAdapter<File> {
