@@ -237,6 +237,10 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // Respond to clicks on the actions in the CAB
 
         switch (item.getItemId()) {
+            case R.id.menu_share:
+                share(selectedEntries.get(0));
+                mode.finish();
+                return true;
             case R.id.menu_rename:
                 rename(selectedEntries.get(0));
                 mode.finish();
@@ -270,6 +274,26 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // Here you can make any necessary updates to the activity when
         // the CAB is removed. By default, selected items are deselected/unchecked.
     }
+
+    private void share(final File selected)
+    {
+        final File file = selected.getAbsoluteFile();
+        Intent i = new Intent(android.content.Intent.ACTION_SEND);
+        String type = URLConnection.guessContentTypeFromName(file.getName());
+        if (type != null)
+        {
+            i.setType(type);
+            Log.d(TAG, type);
+        }
+        else
+        {
+            i.setType("*/*");
+            Log.d(TAG, "*/*");
+        }
+        i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        startActivity(Intent.createChooser(i, "Share"));
+    }
+
 
     private void clip(final List<File> files)
     {
