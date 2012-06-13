@@ -28,12 +28,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
 
@@ -394,8 +395,16 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         Log.d(TAG, "browseTo()");
         if (aDirectory.isDirectory())
         {
-            currentDirectory = aDirectory;
-            fill(currentDirectory.listFiles());
+            if (aDirectory.canRead() && aDirectory.canExecute())
+            {
+                currentDirectory = aDirectory;
+                fill(currentDirectory.listFiles());
+            }
+            else
+            {
+                Toast t = Toast.makeText(c, "Cannot access directory", Toast.LENGTH_SHORT);
+                t.show();
+            }
         }
         else
         {

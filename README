@@ -4,7 +4,6 @@ TODO (in order of complexity):
 
 
 -make application icon
--fix FC on opening protected folders
 -show toast notifications to user
 -implement sharing
 -sort folder first
@@ -20,6 +19,7 @@ DONE:
 
 2012/6/12
 -make new navigate up arrow
+-fix FC on opening protected folders
 
 2012/6/11
 -save selection/clipboard/clipboardtype onSaveInstanceState
