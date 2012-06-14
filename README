@@ -3,7 +3,7 @@ The file manager Android (4.0+) should have shipped with
 TODO (in order of complexity):
 
 
--make application icon
+
 -confirmation for overwriting files
   -append (copy) to copied files, ask to replace moved files
 -allow new folder/file creation
@@ -14,6 +14,9 @@ TODO (in order of complexity):
 -show remaining/occupied space
 
 DONE:
+
+2012/6/14
+-make application icon
 
 2012/6/13
 -add select all capability
