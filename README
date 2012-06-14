@@ -4,7 +4,8 @@ TODO (in order of complexity):
 
 
 -make application icon
--add select all capability
+-confirmation for overwriting files
+  -append (copy) to copied files, ask to replace moved files
 -allow new folder/file creation
 -display file sizes in meta field
 -implement bookmarks
@@ -14,6 +15,8 @@ TODO (in order of complexity):
 
 DONE:
 
+2012/6/13
+-add select all capability
 
 2012/6/12
 -sort folder first

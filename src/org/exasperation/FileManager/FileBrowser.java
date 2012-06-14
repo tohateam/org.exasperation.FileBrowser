@@ -223,13 +223,10 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // such as update the title in the 
         if (checked) {
             selectedEntries.add(directoryEntries.get(position));
-            if (selectedEntries.size() == 2) // invalidate if size went from ==1 to ==2
-                mode.invalidate();
         } else {
             selectedEntries.remove(selectedEntries.indexOf(directoryEntries.get(position)));
-            if (selectedEntries.size() == 1) // invalidate if size went from >1 to ==1
-                mode.invalidate();
         }
+        mode.invalidate();
 
     }
 
@@ -239,6 +236,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // Respond to clicks on the actions in the CAB
 
         switch (item.getItemId()) {
+            case R.id.menu_select_all:
+                select_all();
+                return true;
             case R.id.menu_share:
                 share(selectedEntries.get(0));
                 mode.finish();
@@ -275,6 +275,15 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         selectedEntries.clear();
         // Here you can make any necessary updates to the activity when
         // the CAB is removed. By default, selected items are deselected/unchecked.
+    }
+
+    private void select_all()
+    {
+        selectedEntries.clear();
+        for (int i = 0; i < directoryEntries.size(); i++)
+        {
+            lv.setItemChecked(i, true);
+        }
     }
 
     private void share(final File selected)
