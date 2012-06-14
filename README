@@ -4,6 +4,7 @@ TODO (in order of complexity):
 
 
 -make application icon
+-add select all capability
 -allow new folder/file creation
 -display file sizes in meta field
 -implement bookmarks
