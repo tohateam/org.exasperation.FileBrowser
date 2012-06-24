@@ -2,6 +2,7 @@ package org.exasperation.FileManager;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.lang.Runtime;
 import java.net.URLConnection;
 import java.util.List;
@@ -316,39 +317,48 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     private void paste(final File directory)
     {
-        if (clipboardType == ClipType.CUT)
-        {
-            for (File file : clipboardEntries)
-            {
-                try{
-                    if (file.isDirectory())
-                        FileUtils.moveDirectoryToDirectory(file, directory, false);
-                    else
-                        FileUtils.moveFileToDirectory(file, directory, false);
-                }
-                catch (Exception e)
-                {}
-            }
-            clipboardEntries.clear();
-            clipboardType = ClipType.EMPTY;
-        }
-        else if (clipboardType == ClipType.COPY)
-        {
-            for (File file : clipboardEntries)
-            {
-                try{
-                    if (file.isDirectory())
-                        FileUtils.copyDirectoryToDirectory(file, directory);
-                    else
-                        FileUtils.copyFileToDirectory(file, directory);
-                }
-                catch (Exception e)
-                {}
-            }
-        }
-        else
-            return;
-        fill();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.paste_file))
+               .setMessage(R.string.confirm_paste)
+               .setCancelable(true)
+               .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       if (clipboardType == ClipType.CUT)
+                       {
+                           for (File file : clipboardEntries)
+                           {
+                               file.renameTo(new File(currentDirectory, file.getName()));
+                           }
+                           clipboardEntries.clear();
+                           clipboardType = ClipType.EMPTY;
+                           fill();
+                       }
+                       else if (clipboardType == ClipType.COPY)
+                       {
+                           for (File file : clipboardEntries)
+                           {
+                               try{
+                                   if (file.isDirectory())
+                                       FileUtils.copyDirectoryToDirectory(file, directory);
+                                   else
+                                       FileUtils.copyFileToDirectory(file, directory);
+                               }
+                               catch (IOException e)
+                               {}
+                           }
+                           fill();
+                       }
+                       else
+                           dialog.cancel();
+                           return;
+                   }
+               })
+               .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       dialog.cancel();
+                   }
+               });
+        builder.create().show();
     }
 
 

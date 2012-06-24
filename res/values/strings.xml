@@ -18,5 +18,7 @@
     <string name="select_all">Select all</string>
     <string name="rename_file">Rename file</string>
     <string name="delete_file">Delete file(s)</string>
+    <string name="paste_file">Paste file(s)</string>
     <string name="confirm_delete">Are you sure you want to delete the selected file(s)?</string>
+    <string name="confirm_paste">Are you sure you want to paste the file(s) here? Old files with the same name will be overwritten.</string>
 </resources>

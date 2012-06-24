@@ -2,10 +2,6 @@ The file manager Android (4.0+) should have shipped with
 
 TODO (in order of complexity):
 
-
-
--confirmation for overwriting files
-  -append (copy) to copied files, ask to replace moved files
 -allow new folder/file creation
 -display file sizes in meta field
 -implement bookmarks
@@ -14,6 +10,9 @@ TODO (in order of complexity):
 -show remaining/occupied space
 
 DONE:
+
+2012/6/24
+-warning box about overwriting files while pasting
 
 2012/6/14
 -make application icon
