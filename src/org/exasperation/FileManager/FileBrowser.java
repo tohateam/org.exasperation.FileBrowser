@@ -159,8 +159,10 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     {
         Log.d(TAG, "onPrepareOptionsMenu()" + clipboardType);
         MenuInflater inflater = getMenuInflater();
+        menu.clear();
         if (clipboardType != ClipType.EMPTY)
             inflater.inflate(R.menu.paste_menu, menu);
+        inflater.inflate(R.menu.general_menu, menu);
         return true;
     }
 
@@ -178,6 +180,15 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             case R.id.menu_paste:
                 paste(currentDirectory);
                 invalidateOptionsMenu();
+                return true;
+            case R.id.menu_select_all:
+                selectAll();
+                return true; 
+            case R.id.menu_new_file:
+                newFile();
+                return true;
+            case R.id.menu_new_directory:
+                newDirectory();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -209,7 +220,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         menu.clear();
 
         MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.general_menu, menu);
+        inflater.inflate(R.menu.general_selected_menu, menu);
         if (selectedEntries.size() < 2)
             inflater.inflate(R.menu.single_selected_menu, menu);
 
@@ -238,7 +249,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
         switch (item.getItemId()) {
             case R.id.menu_select_all:
-                select_all();
+                selectAll();
                 return true;
             case R.id.menu_share:
                 share(selectedEntries.get(0));
@@ -278,7 +289,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         // the CAB is removed. By default, selected items are deselected/unchecked.
     }
 
-    private void select_all()
+    private void selectAll()
     {
         selectedEntries.clear();
         for (int i = 0; i < directoryEntries.size(); i++)
@@ -361,7 +372,54 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         builder.create().show();
     }
 
-
+    private void newDirectory() {
+        final EditText nameEditor = new EditText(getApplicationContext());
+        nameEditor.setText(R.string.new_directory);
+        nameEditor.selectAll();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.new_directory))
+               .setView(nameEditor)
+               .setCancelable(true)
+               .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       final File file = new File(currentDirectory, nameEditor.getText().toString());
+                       file.mkdir();
+                       fill();
+                   }
+               })
+               .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       dialog.cancel();
+                   }
+               });
+        builder.create().show();
+    }
+    
+    private void newFile() {
+        final EditText nameEditor = new EditText(getApplicationContext());
+        nameEditor.setText(R.string.default_filename);
+        nameEditor.selectAll();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.new_file))
+               .setView(nameEditor)
+               .setCancelable(true)
+               .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       final File file = new File(currentDirectory, nameEditor.getText().toString());
+                       try {
+                           file.createNewFile();
+                       }
+                       catch(Exception e) {}
+                       fill();
+                   }
+               })
+               .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       dialog.cancel();
+                   }
+               });
+        builder.create().show();
+    }
 
     private void rename(final File selected) {
         final File file = selected.getAbsoluteFile();

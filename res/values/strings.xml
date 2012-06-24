@@ -16,6 +16,9 @@
     <string name="share">Share</string>
     <string name="bookmarks">Bookmarks</string>
     <string name="select_all">Select all</string>
+    <string name="new_file">New File</string>
+    <string name="default_filename">New File.txt</string>
+    <string name="new_directory">New Folder</string>
     <string name="rename_file">Rename file</string>
     <string name="delete_file">Delete file(s)</string>
     <string name="paste_file">Paste file(s)</string>
