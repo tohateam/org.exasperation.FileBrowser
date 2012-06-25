@@ -178,7 +178,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 }
                 return true;
             case R.id.menu_paste:
-                paste(currentDirectory);
+                paste();
                 invalidateOptionsMenu();
                 return true;
             case R.id.menu_select_all:
@@ -326,7 +326,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
     }
 
-    private void paste(final File directory)
+    private void paste()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.paste_file))
@@ -334,34 +334,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                .setCancelable(true)
                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
-                       if (clipboardType == ClipType.CUT)
+                       if (clipboardType == ClipType.EMPTY)
                        {
-                           for (File file : clipboardEntries)
-                           {
-                               file.renameTo(new File(currentDirectory, file.getName()));
-                           }
-                           clipboardEntries.clear();
-                           clipboardType = ClipType.EMPTY;
-                           fill();
-                       }
-                       else if (clipboardType == ClipType.COPY)
-                       {
-                           for (File file : clipboardEntries)
-                           {
-                               try{
-                                   if (file.isDirectory())
-                                       FileUtils.copyDirectoryToDirectory(file, directory);
-                                   else
-                                       FileUtils.copyFileToDirectory(file, directory);
-                               }
-                               catch (IOException e)
-                               {}
-                           }
-                           fill();
-                       }
-                       else
                            dialog.cancel();
                            return;
+                       }
+                       else
+                           new PasteTask(c).execute(clipboardEntries.toArray(new File[1]));
+                           
                    }
                })
                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -616,6 +596,56 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             return v;
         }
     }
+    private class PasteTask extends AsyncTask<File, Void, Boolean> {
+        public static final String TAG = "org.exasperation.FileManager";
+        ProgressDialog dialog;
+        boolean success = true;
+        Context c;
+        public PasteTask(Context context) {
+            c = context;
+        }
+
+        protected void onPreExecute() {
+            
+            dialog = new ProgressDialog(c);
+            dialog.setTitle("Pasting files");
+            dialog.setMessage("Please wait...");
+            dialog.setIndeterminate(true);
+            dialog.show();
+            
+        }
+        protected Boolean doInBackground(File... files) {
+            if (clipboardType == ClipType.CUT)
+            {
+                for (int i = 0; i < files.length; i++)
+                {
+                    files[i].renameTo(new File(currentDirectory, files[i].getName()));
+                }
+                clipboardEntries.clear();
+                clipboardType = ClipType.EMPTY;
+            }
+            else if (clipboardType == ClipType.COPY)
+            {
+                for (int i = 0; i < files.length; i++)
+                {
+                    try{
+                        if (files[i].isDirectory())
+                            FileUtils.copyDirectoryToDirectory(files[i], currentDirectory);
+                        else
+                            FileUtils.copyFileToDirectory(files[i], currentDirectory);
+                        }
+                    catch (IOException e)
+                    {}
+                }
+            }
+            return true; 
+        }
+        protected void onPostExecute(Boolean result) {
+            dialog.dismiss();
+            fill();
+        }
+    }
+    
     private class DeleteTask extends AsyncTask<File, Void, Boolean> {
         public static final String TAG = "org.exasperation.FileManager";
         ProgressDialog dialog;
@@ -628,12 +658,10 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         protected void onPreExecute() {
             
             dialog = new ProgressDialog(c);
-            Log.d(TAG,"setup complete");
             dialog.setTitle("Deleting files");
             dialog.setMessage("Please wait...");
             dialog.setIndeterminate(true);
             dialog.show();
-            Log.d(TAG, "showing...");
             
         }
         protected Boolean doInBackground(File... files) {
