@@ -2,7 +2,6 @@ The file manager Android (4.0+) should have shipped with
 
 TODO (in order of complexity):
 
--display file sizes in meta field
 -make back button go up folder, unless at /sdcard or higher
 -implement bookmarks
   -set default directory
@@ -12,6 +11,7 @@ TODO (in order of complexity):
 DONE:
 
 2012/6/25
+-display file sizes in meta field
 -added progress dialog to paste operation
 
 2012/6/24
