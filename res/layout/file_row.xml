@@ -26,11 +26,24 @@
         android:textColor="#FFFFFF"
     />
     <TextView
-        android:id="@+id/file_meta"
+        android:id="@+id/file_size"
         android:layout_toRightOf="@id/file_icon"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="64dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="12sp"
+        android:textColor="#999999"
+    />
+    <TextView
+        android:id="@+id/file_meta"
+        android:layout_toRightOf="@id/file_size"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_width="96dp"
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
         android:singleLine="true"
