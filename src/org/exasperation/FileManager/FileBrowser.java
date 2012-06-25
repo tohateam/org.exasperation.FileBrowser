@@ -498,19 +498,19 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     }
 
 
-	private void fill() {
+    private void fill() {
         Log.d(TAG, "fill()");
         final File[] directories = currentDirectory.listFiles(new DirectoryFilter());
         final File[] files = currentDirectory.listFiles(new NoDirectoryFilter());
         Arrays.sort(directories);
         Arrays.sort(files);
-		this.directoryEntries.clear();
-	    for (File file : directories){
-	        this.directoryEntries.add(file);
-	    }
-	    for (File file : files){
-	        this.directoryEntries.add(file);
-	    }
+        this.directoryEntries.clear();
+        for (File file : directories){
+            this.directoryEntries.add(file);
+	}
+        for (File file : files){
+            this.directoryEntries.add(file);
+        }
 
         lv.setAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
         if (currentDirectory.getAbsolutePath() != ROOT_DIR)
