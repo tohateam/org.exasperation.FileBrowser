@@ -3,6 +3,7 @@ package org.exasperation.FileManager;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.lang.Math;
 import java.lang.Runtime;
 import java.net.URLConnection;
 import java.util.List;
@@ -554,25 +555,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 }
                 else {
                     String type = URLConnection.guessContentTypeFromName(o.getName());
-                    Log.d (TAG, "type guessed as " + type);
                     if (type != null) {
                         final Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.fromFile(o), type);
 
                         final ResolveInfo app = getPackageManager().resolveActivity(intent, 0);
-   /* 
-                        final List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-    
-                        if (matches.size() > 0)
-                        {
-                            //Only get first match, since we can't display a whole list of icons
-                            //OR CAN WE????
-                            //Yea we can't fuck you
-                            icon = matches.get(0).loadIcon(getPackageManager());
-                            for (ResolveInfo match : matches)
-                                Log.d(TAG, ""+match.loadLabel(getPackageManager()));
-                        }
-*/
                         if (app != null)
                             icon = app.loadIcon(getPackageManager());
                         else 
@@ -590,7 +577,22 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 }
                 if( fileMeta != null){
                     SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-                    fileMeta.setText(format.format(new Date(o.lastModified())));
+                    if(!o.isDirectory() && o.canRead())
+                    {
+                        long size = o.length();
+                        int kb = 1024;
+                        if (size < kb)
+                            fileMeta.setText(format.format(new Date(o.lastModified())) + "    " + size + "B");
+                        else
+                        {
+                            int exp = (int) (Math.log(size) / Math.log(kb));
+                            String prefix = ("KMGTPE").charAt(exp-1) + ("i");
+                            fileMeta.setText(format.format(new Date(o.lastModified())) + "    " + 
+                                             String.format("%.1f%sB", size/Math.pow(kb,exp),prefix));
+                        }
+                    }
+                    else
+                        fileMeta.setText(format.format(new Date(o.lastModified())));
                 }
             }
             return v;
