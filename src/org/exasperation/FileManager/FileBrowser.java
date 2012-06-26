@@ -312,12 +312,10 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         if (type != null)
         {
             i.setType(type);
-            Log.d(TAG, type);
         }
         else
         {
             i.setType("*/*");
-            Log.d(TAG, "*/*");
         }
         i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
         startActivity(Intent.createChooser(i, "Share"));
@@ -330,6 +328,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         {
             clipboardEntries.add(file.getAbsoluteFile());
         }
+        Toast t = Toast.makeText(c, "Added to clipboard", Toast.LENGTH_SHORT);
+        t.show();
     }
 
     private void paste()
@@ -371,6 +371,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        final File file = new File(currentDirectory, nameEditor.getText().toString());
                        file.mkdir();
                        fill();
+                       Toast t = Toast.makeText(c, "Directory created", Toast.LENGTH_SHORT);
+                       t.show();
                    }
                })
                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -394,6 +396,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        final File file = new File(currentDirectory, nameEditor.getText().toString());
                        try {
                            file.createNewFile();
+                           Toast t = Toast.makeText(c, "File created", Toast.LENGTH_SHORT);
+                           t.show();
                        }
                        catch(Exception e) {}
                        fill();
@@ -419,8 +423,15 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
                        if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString())))
-                           Log.d(TAG, "renameSelection(): rename successful!");
-                       fill();
+                       {
+                           Toast t = Toast.makeText(c, "Rename successful", Toast.LENGTH_SHORT);
+                           t.show();
+                           fill();
+                       }
+                       else {
+                           Toast t = Toast.makeText(c, "Rename failed", Toast.LENGTH_SHORT);
+                           t.show();
+                       }
                    }
                })
                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -497,7 +508,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             }
             else {
                 intent.setDataAndType(Uri.fromFile(aDirectory),type);
-                Log.d(TAG, "opening as "+type);
                 startActivity(intent);
             }
         }
@@ -652,6 +662,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
+            Toast t = Toast.makeText(c, "Pasted", Toast.LENGTH_SHORT);
+            t.show();
             fill();
         }
     }
@@ -691,6 +703,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
+            Toast t = Toast.makeText(c, "Deleted", Toast.LENGTH_SHORT);
+            t.show();
             fill();
         }
     }
