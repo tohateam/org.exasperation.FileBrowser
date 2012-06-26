@@ -2,13 +2,14 @@ The file manager Android (4.0+) should have shipped with
 
 TODO (in order of complexity):
 
--make back button go up folder, unless at /sdcard or higher
 -implement bookmarks
   -set default directory
 -include folder tree dropddown navigation
 -show remaining/occupied space
 
 DONE:
+2012/6/26
+-make back button go up folder, unless at /
 
 2012/6/25
 -display file sizes in meta field

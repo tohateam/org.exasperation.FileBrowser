@@ -172,11 +172,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         Log.d(TAG, "onOptionsItemSelected()");
         switch (item.getItemId()) {
             case android.R.id.home:
-                // app icon in action bar clicked; go up
                 if (currentDirectory.getParentFile() != null)
-                {
                     browseTo(currentDirectory.getParentFile());
-                }
                 return true;
             case R.id.menu_paste:
                 paste();
@@ -194,6 +191,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    
+    @Override
+    public void onBackPressed() {
+        if (currentDirectory.getParentFile() != null)
+            browseTo(currentDirectory.getParentFile());
+        else
+            finish();
     }
 
     @Override
