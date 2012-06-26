@@ -31,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem; 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -380,7 +381,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        dialog.cancel();
                    }
                });
-        builder.create().show();
+        AlertDialog d = builder.create();
+        d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        d.show();
     }
     
     private void newFile() {
@@ -408,7 +411,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        dialog.cancel();
                    }
                });
-        builder.create().show();
+        AlertDialog d = builder.create();
+        d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        d.show();
     }
 
     private void rename(final File selected) {
@@ -439,7 +444,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        dialog.cancel();
                    }
                });
-        builder.create().show();
+        AlertDialog d = builder.create();
+        d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        d.show();
     }
 
     private void delete(final List<File> selected)
