@@ -485,7 +485,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             }
             else
             {
-                Toast t = Toast.makeText(c, R.string.cannot_acces, Toast.LENGTH_SHORT);
+                Toast t = Toast.makeText(c, R.string.cannot_access, Toast.LENGTH_SHORT);
                 t.show();
             }
         }
@@ -669,7 +669,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
-            Toast t = Toast.makeText(c, R.id.pasted, Toast.LENGTH_SHORT);
+            Toast t = Toast.makeText(c, R.string.pasted, Toast.LENGTH_SHORT);
             t.show();
             fill();
         }
