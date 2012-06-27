@@ -329,7 +329,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         {
             clipboardEntries.add(file.getAbsoluteFile());
         }
-        Toast t = Toast.makeText(c, "Added to clipboard", Toast.LENGTH_SHORT);
+        Toast t = Toast.makeText(c, R.string.added_clipboard, Toast.LENGTH_SHORT);
         t.show();
     }
 
@@ -372,7 +372,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        final File file = new File(currentDirectory, nameEditor.getText().toString());
                        file.mkdir();
                        fill();
-                       Toast t = Toast.makeText(c, "Directory created", Toast.LENGTH_SHORT);
+                       Toast t = Toast.makeText(c, R.string.directory_created, Toast.LENGTH_SHORT);
                        t.show();
                    }
                })
@@ -399,7 +399,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        final File file = new File(currentDirectory, nameEditor.getText().toString());
                        try {
                            file.createNewFile();
-                           Toast t = Toast.makeText(c, "File created", Toast.LENGTH_SHORT);
+                           Toast t = Toast.makeText(c, R.string.file_created, Toast.LENGTH_SHORT);
                            t.show();
                        }
                        catch(Exception e) {}
@@ -429,12 +429,12 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                    public void onClick(DialogInterface dialog, int id) {
                        if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString())))
                        {
-                           Toast t = Toast.makeText(c, "Rename successful", Toast.LENGTH_SHORT);
+                           Toast t = Toast.makeText(c, R.string.rename_success, Toast.LENGTH_SHORT);
                            t.show();
                            fill();
                        }
                        else {
-                           Toast t = Toast.makeText(c, "Rename failed", Toast.LENGTH_SHORT);
+                           Toast t = Toast.makeText(c, R.string.rename_fail, Toast.LENGTH_SHORT);
                            t.show();
                        }
                    }
@@ -485,7 +485,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             }
             else
             {
-                Toast t = Toast.makeText(c, "Cannot access directory", Toast.LENGTH_SHORT);
+                Toast t = Toast.makeText(c, R.string.cannot_acces, Toast.LENGTH_SHORT);
                 t.show();
             }
         }
@@ -669,7 +669,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
-            Toast t = Toast.makeText(c, "Pasted", Toast.LENGTH_SHORT);
+            Toast t = Toast.makeText(c, R.id.pasted, Toast.LENGTH_SHORT);
             t.show();
             fill();
         }
@@ -710,7 +710,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
-            Toast t = Toast.makeText(c, "Deleted", Toast.LENGTH_SHORT);
+            Toast t = Toast.makeText(c, R.string.deleted, Toast.LENGTH_SHORT);
             t.show();
             fill();
         }
@@ -726,4 +726,3 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
     }
 }
-
