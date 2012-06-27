@@ -22,6 +22,14 @@
     <string name="rename_file">Rename file</string>
     <string name="delete_file">Delete file(s)</string>
     <string name="paste_file">Paste file(s)</string>
+    <string name="added_clipboard">Added to clipboard</string>
+    <string name="directory_created">Directory created</string>
+    <string name="file_created">File created</string>
+    <string name="rename_success">Successfully renamed</string>
+    <string name="rename_fail">Rename failed</string>
+    <string name="cannot_access">Cannot access directory</string>
+    <string name="pasted">Pasted</string>
+    <string name="deleted">Deleted</string>
     <string name="confirm_delete">Are you sure you want to delete the selected file(s)?</string>
     <string name="confirm_paste">Are you sure you want to paste the file(s) here? Old files with the same name will be overwritten.</string>
 </resources>
