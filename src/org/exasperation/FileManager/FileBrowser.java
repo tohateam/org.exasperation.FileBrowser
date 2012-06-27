@@ -68,7 +68,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        //Log.d(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser);
@@ -93,7 +93,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onStart()
     {
-        Log.d(TAG, "onStart()");
+        //Log.d(TAG, "onStart()");
 
         super.onStart();
         lv.setOnItemClickListener(this);
@@ -104,7 +104,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onResume()
     {
-        Log.d(TAG, "onResume()");
+        //Log.d(TAG, "onResume()");
 
         super.onResume();
     }
@@ -112,7 +112,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onPause()
     {
-        Log.d(TAG, "onPause()");
+        //Log.d(TAG, "onPause()");
 
         super.onPause();
     }
@@ -120,7 +120,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onStop()
     {
-        Log.d(TAG, "onStop()");
+        //Log.d(TAG, "onStop()");
 
         super.onStop();
     }
@@ -128,7 +128,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        //Log.d(TAG, "onDestroy()");
 
         super.onDestroy();
     }
@@ -136,7 +136,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        //Log.d(TAG, "onSaveInstanceState()");
 
         super.onSaveInstanceState(savedInstanceState);
 
@@ -151,7 +151,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onRestoreInstanceState()");
+        //Log.d(TAG, "onRestoreInstanceState()");
 
         super.onRestoreInstanceState(savedInstanceState);
     }
@@ -159,7 +159,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public boolean onPrepareOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onPrepareOptionsMenu()" + clipboardType);
+        //Log.d(TAG, "onPrepareOptionsMenu()" + clipboardType);
         MenuInflater inflater = getMenuInflater();
         menu.clear();
         if (clipboardType != ClipType.EMPTY)
@@ -170,7 +170,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG, "onOptionsItemSelected()");
+        //Log.d(TAG, "onOptionsItemSelected()");
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (currentDirectory.getParentFile() != null)
@@ -205,7 +205,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onItemClick(AdapterView list, View view, int position, long id)
     {
-        Log.d(TAG, "onItemClick()");
+        //Log.d(TAG, "onItemClick()");
         String newPath = null;
         newPath = currentDirectory.getAbsolutePath() + File.separator + directoryEntries.get(position).getName();
         browseTo(new File(newPath));
@@ -213,7 +213,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        Log.d(TAG, "onCreateActionMode()");
+        //Log.d(TAG, "onCreateActionMode()");
         selectedEntries.clear();
         // Inflate the menu for the CAB
         return true;
@@ -221,7 +221,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        Log.d(TAG, "onPrepareActionMode()");
+        //Log.d(TAG, "onPrepareActionMode()");
         // Here you can perform updates to the CAB due to
         // an invalidate() request
         menu.clear();
@@ -237,7 +237,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onItemCheckedStateChanged(ActionMode mode, int position,
                                           long id, boolean checked) {
-        Log.d(TAG, "onItemCheckedStateChanged()");
+        //Log.d(TAG, "onItemCheckedStateChanged()");
         // Here you can do something when items are selected/de-selected,
         // such as update the title in the 
         if (checked) {
@@ -251,7 +251,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        Log.d(TAG, "onActionItemClicked()");
+        //Log.d(TAG, "onActionItemClicked()");
         // Respond to clicks on the actions in the CAB
 
         switch (item.getItemId()) {
@@ -289,7 +289,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public void onDestroyActionMode(ActionMode mode) {
-        Log.d(TAG, "onDestroyActionMode()");
+        //Log.d(TAG, "onDestroyActionMode()");
 
         selectedEntries.clear();
         // Here you can make any necessary updates to the activity when
@@ -451,7 +451,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     private void delete(final List<File> selected)
     {
-        Log.d(TAG, "delete()");
+        //Log.d(TAG, "delete()");
         final List<File> files = new ArrayList<File>();
         for (File file : selected)
             files.add(file);
@@ -475,7 +475,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     private void browseTo(final File aDirectory)
     {
-        Log.d(TAG, "browseTo()");
+        //Log.d(TAG, "browseTo()");
         if (aDirectory.isDirectory())
         {
             if (aDirectory.canRead() && aDirectory.canExecute())
@@ -522,7 +522,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
 
     private void fill() {
-        Log.d(TAG, "fill()");
+        //Log.d(TAG, "fill()");
         final File[] directories = currentDirectory.listFiles(new DirectoryFilter());
         final File[] files = currentDirectory.listFiles(new NoDirectoryFilter());
         Arrays.sort(directories);
