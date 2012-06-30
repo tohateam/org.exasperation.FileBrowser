@@ -1,4 +1,4 @@
-package org.exasperation.FileManager;
+package org.exasperation.FileBrowser;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -48,7 +48,7 @@ import android.os.Bundle;
 
 public class FileBrowser extends Activity implements ListView.OnItemClickListener, AbsListView.MultiChoiceModeListener
 {
-    public static final String TAG = "org.exasperation.FileManager";
+    public static final String TAG = "org.exasperation.FileBrowser";
     public static final String ROOT_DIR = "/";
     public static final String DATE_FORMAT = "MMM d, yyyy";
     public static final String TYPE_PLAINTEXT = "text/plain";
@@ -624,7 +624,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
     }
     private class PasteTask extends AsyncTask<File, Void, Boolean> {
-        public static final String TAG = "org.exasperation.FileManager";
+        public static final String TAG = "org.exasperation.FileBrowser";
         ProgressDialog dialog;
         boolean success = true;
         Context c;
@@ -676,7 +676,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     }
     
     private class DeleteTask extends AsyncTask<File, Void, Boolean> {
-        public static final String TAG = "org.exasperation.FileManager";
+        public static final String TAG = "org.exasperation.FileBrowser";
         ProgressDialog dialog;
         boolean success = true;
         Context c;
