@@ -88,10 +88,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         spaceFree = (TextView) findViewById(R.id.space_free);
         colorBar = (LinearLayout) findViewById(R.id.color_bar);
         stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-<<<<<<< HEAD
-=======
-     
->>>>>>> d7321ef5770dc3f803c822400b42e1bacb0bcdbb
 
         if (savedInstanceState == null)
         {
