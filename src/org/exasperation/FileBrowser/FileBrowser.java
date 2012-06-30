@@ -88,7 +88,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         spaceFree = (TextView) findViewById(R.id.space_free);
         colorBar = (LinearLayout) findViewById(R.id.color_bar);
         stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-     
 
         if (savedInstanceState == null)
         {
@@ -102,7 +101,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             if (savedPosition >= 0)
                 lv.setSelectionFromTop(savedPosition, savedListTop);
         }
-
     }
 
     @Override
@@ -363,7 +361,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        }
                        else
                            new PasteTask(c).execute(clipboardEntries.toArray(new File[1]));
-                           
                    }
                })
                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -517,7 +514,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                            public void onClick(DialogInterface dialog, int id) {
                                intent.setDataAndType(Uri.fromFile(aDirectory), TYPE_PLAINTEXT);
-                               
                                startActivity(intent);
                            }
                         })
@@ -545,7 +541,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         this.directoryEntries.clear();
         for (File file : directories){
             this.directoryEntries.add(file);
-	}
+        }
         for (File file : files){
             this.directoryEntries.add(file);
         }
@@ -708,13 +704,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
 
         protected void onPreExecute() {
-            
             dialog = new ProgressDialog(c);
             dialog.setTitle("Deleting files");
             dialog.setMessage("Please wait...");
             dialog.setIndeterminate(true);
             dialog.show();
-            
         }
         protected Boolean doInBackground(File... files) {
             for (int i = 0; i < files.length; i++)
@@ -728,7 +722,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 else
                     files[i].delete();
             }
-
             return true; 
         }
         protected void onPostExecute(Boolean result) {
