@@ -60,7 +60,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     public enum ClipType { EMPTY, COPY, CUT };
 
     ListView lv = null;
-    String homeDirectory = "/sdcard/";
+    File externalStorageDirectory = Environment.getExternalStorageDirectory();
     Context c = this;
     File currentDirectory = null;
     List<File> selectedEntries = new ArrayList<File>();
@@ -71,7 +71,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     StatFs stat;
     LinearLayout colorBar;
     TextView spaceUsedBar, spaceFreeBar, spaceUsed, spaceFree;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -91,16 +90,13 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
         if (savedInstanceState == null)
         {
-            if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
-                currentDirectory = new File(homeDirectory);
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+                currentDirectory = externalStorageDirectory;
             else
             {
                 currentDirectory = new File(ROOT_DIR);
                 Toast t = Toast.makeText(c, R.string.not_mounted, Toast.LENGTH_SHORT);
                 t.show();
-                spaceUsed.setVisibility(View.GONE);
-                spaceFree.setVisibility(View.GONE);
-                colorBar.setVisibility(View.GONE);
             }
         }
         else
@@ -498,6 +494,15 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     private void browseTo(final File aDirectory)
     {
         //Log.d(TAG, "browseTo()");
+        if (isExternal(currentDirectory) &&
+            isExternal(aDirectory) &&
+            !Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+        {
+            Toast t = Toast.makeText(c, R.string.not_mounted, Toast.LENGTH_SHORT);
+            t.show();
+            browseTo(new File(ROOT_DIR));
+            return;
+        }
         if (aDirectory.isDirectory())
         {
             if (aDirectory.canRead() && aDirectory.canExecute())
@@ -541,7 +546,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
     }
 
-
     private void fill() {
         //Log.d(TAG, "fill()");
         final File[] directories = currentDirectory.listFiles(new DirectoryFilter());
@@ -555,7 +559,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         for (File file : files){
             this.directoryEntries.add(file);
         }
-        if (currentDirectory.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().getAbsolutePath())) {
+        if (isExternal(currentDirectory)) {
             colorBar.setVisibility(View.VISIBLE);
             spaceFree.setVisibility(View.VISIBLE);
             spaceUsed.setVisibility(View.VISIBLE);
@@ -586,6 +590,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
         invalidateOptionsMenu();
+    }
+
+    private boolean isExternal(final File file) {
+        return ((file.getAbsolutePath().startsWith(externalStorageDirectory.getAbsolutePath())) ||
+                (file.getAbsolutePath().startsWith("/sdcard"))); 
     }
 
     private class FileAdapter extends ArrayAdapter<File> {
