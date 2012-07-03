@@ -5,9 +5,11 @@ TODO (in order of complexity):
 -implement bookmarks
   -set default directory
 -include folder tree dropddown navigation
--show remaining/occupied space
 
 DONE:
+2012/6/30
+-show remaining/occupied space
+
 2012/6/26
 -make back button go up folder, unless at /
 
