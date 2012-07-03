@@ -91,7 +91,17 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
         if (savedInstanceState == null)
         {
-            currentDirectory = new File(homeDirectory);
+            if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
+                currentDirectory = new File(homeDirectory);
+            else
+            {
+                currentDirectory = new File(ROOT_DIR);
+                Toast t = Toast.makeText(c, R.string.not_mounted, Toast.LENGTH_SHORT);
+                t.show();
+                spaceUsed.setVisibility(View.GONE);
+                spaceFree.setVisibility(View.GONE);
+                colorBar.setVisibility(View.GONE);
+            }
         }
         else
         {
@@ -545,14 +555,23 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         for (File file : files){
             this.directoryEntries.add(file);
         }
-        //Log.d(TAG, "WIDTH = " + colorBar.getWidth());
-        stat.restat(Environment.getExternalStorageDirectory().getPath());
-        double freeBlocks = (double) stat.getFreeBlocks() / (double) stat.getBlockSize();
-        double totalBlocks = (double) stat.getBlockCount() / (double) stat.getBlockSize();
-        spaceFree.setText(Math.round(freeBlocks*100.0)/100.0 + "GiB Free");
-        spaceUsed.setText((Math.round((totalBlocks - freeBlocks)*100.0)/100.0) + "GiB Used ");
-        spaceFreeBar.setWidth((int)(colorBar.getWidth() * freeBlocks / totalBlocks));
-        spaceUsedBar.setWidth((int)(colorBar.getWidth() * (totalBlocks - freeBlocks) / totalBlocks));
+        if (currentDirectory.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().getAbsolutePath())) {
+            colorBar.setVisibility(View.VISIBLE);
+            spaceFree.setVisibility(View.VISIBLE);
+            spaceUsed.setVisibility(View.VISIBLE);
+            stat.restat(Environment.getExternalStorageDirectory().getPath());
+            double freeBlocks = (double) stat.getFreeBlocks() / (double) stat.getBlockSize();
+            double totalBlocks = (double) stat.getBlockCount() / (double) stat.getBlockSize();
+            spaceFree.setText(Math.round(freeBlocks*100.0)/100.0 + "GiB Free");
+            spaceUsed.setText((Math.round((totalBlocks - freeBlocks)*100.0)/100.0) + "GiB Used ");
+            spaceFreeBar.setWidth((int)(colorBar.getWidth() * freeBlocks / totalBlocks));
+            spaceUsedBar.setWidth((int)(colorBar.getWidth() * (totalBlocks - freeBlocks) / totalBlocks));
+        }
+        else {
+            colorBar.setVisibility(View.GONE);
+            spaceFree.setVisibility(View.GONE);
+            spaceUsed.setVisibility(View.GONE);
+        }
 
         lv.setAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
         if (currentDirectory.getAbsolutePath() != ROOT_DIR)
