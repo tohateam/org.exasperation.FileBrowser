@@ -322,7 +322,18 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemid) {
-         return false; 
+        String path = "";
+        for (int i = 0; i <= itemPosition; i++)
+        {
+           path += pathTree.get(i);
+        }
+        Log.d(TAG, path);
+        if (path.equals(currentDirectory.getAbsolutePath()+ROOT_DIR))
+            return false;
+        else {
+            browseTo(new File(path)); 
+            return true;
+        }
     }
 
     private void selectAll()
@@ -593,7 +604,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             //topMenu.setTitle(currentDirectory.getName() + File.separator);
             int depth = generatePathTree();
             SpinnerAdapter spinnerAdapter = new ArrayAdapter<String> (c, android.R.layout.simple_spinner_dropdown_item, pathTree);
-            topMenu.setListNavigationCallbacks(spinnerAdapter, null);
+            topMenu.setListNavigationCallbacks(spinnerAdapter, this);
             topMenu.setSelectedNavigationItem(depth);
             topMenu.setHomeButtonEnabled(true);
         }
