@@ -9,6 +9,7 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -37,6 +38,7 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,7 +51,7 @@ import org.apache.commons.io.FileUtils;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class FileBrowser extends Activity implements ListView.OnItemClickListener, AbsListView.MultiChoiceModeListener
+public class FileBrowser extends Activity implements ListView.OnItemClickListener, AbsListView.MultiChoiceModeListener, ActionBar.OnNavigationListener
 {
     public static final String TAG = "org.exasperation.FileBrowser";
     public static final String ROOT_DIR = "/";
@@ -66,6 +68,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     List<File> selectedEntries = new ArrayList<File>();
     List<File> directoryEntries = new ArrayList<File>();
     List<File> clipboardEntries = new ArrayList<File>();
+    List<String> pathTree = new ArrayList<String>();
     ClipType clipboardType = ClipType.EMPTY;
     ActionBar topMenu = null;
     StatFs stat;
@@ -115,6 +118,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         //Log.d(TAG, "onStart()");
 
         super.onStart();
+        topMenu.setDisplayShowTitleEnabled(false);
+        topMenu.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         lv.setOnItemClickListener(this);
         lv.setMultiChoiceModeListener(this);
         browseTo(currentDirectory);
@@ -313,6 +318,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         selectedEntries.clear();
         // Here you can make any necessary updates to the activity when
         // the CAB is removed. By default, selected items are deselected/unchecked.
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemid) {
+         return false; 
     }
 
     private void selectAll()
@@ -580,7 +590,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         lv.setAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
         if (currentDirectory.getAbsolutePath() != ROOT_DIR)
         {
-            topMenu.setTitle(currentDirectory.getName() + File.separator);
+            //topMenu.setTitle(currentDirectory.getName() + File.separator);
+            int depth = generatePathTree();
+            SpinnerAdapter spinnerAdapter = new ArrayAdapter<String> (c, android.R.layout.simple_spinner_dropdown_item, pathTree);
+            topMenu.setListNavigationCallbacks(spinnerAdapter, null);
+            topMenu.setSelectedNavigationItem(depth);
             topMenu.setHomeButtonEnabled(true);
         }
         else
@@ -591,6 +605,24 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
         invalidateOptionsMenu();
     }
+
+    private int generatePathTree() {
+        int depth = 0;
+        pathTree.clear();
+        File temp = currentDirectory;
+
+        while (temp.getParentFile()!=null) {
+            depth++;
+            pathTree.add(temp.getName()+ROOT_DIR);
+            temp = temp.getParentFile();
+        }
+        pathTree.add(ROOT_DIR);
+        Collections.reverse(pathTree);
+        return depth;
+    }
+            
+
+    
 
     private boolean isExternal(final File file) {
         return ((file.getAbsolutePath().startsWith(externalStorageDirectory.getAbsolutePath())) ||
