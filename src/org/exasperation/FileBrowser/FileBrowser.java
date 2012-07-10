@@ -322,13 +322,18 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemid) {
-        String path = "";
-        for (int i = 0; i <= itemPosition; i++)
-        {
-           path += pathTree.get(i);
+        String path = ROOT_DIR;
+        if (itemPosition != 0) {
+            for (int i = 1; i <= itemPosition; i++)
+            {
+                path += pathTree.get(i);
+            }
+            //we have to cut off the last directory separator
+            path = path.substring(0, path.length()-1);
         }
-        Log.d(TAG, path);
-        if (path.equals(currentDirectory.getAbsolutePath()+ROOT_DIR))
+        //Log.d(TAG, path);
+        //Log.d(TAG, currentDirectory.getAbsolutePath());
+        if (path.equals(currentDirectory.getAbsolutePath()))
             return false;
         else {
             browseTo(new File(path)); 
@@ -602,18 +607,18 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         if (currentDirectory.getAbsolutePath() != ROOT_DIR)
         {
             //topMenu.setTitle(currentDirectory.getName() + File.separator);
-            int depth = generatePathTree();
-            SpinnerAdapter spinnerAdapter = new ArrayAdapter<String> (c, android.R.layout.simple_spinner_dropdown_item, pathTree);
-            topMenu.setListNavigationCallbacks(spinnerAdapter, this);
-            topMenu.setSelectedNavigationItem(depth);
             topMenu.setHomeButtonEnabled(true);
+            topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
         }
         else
         {
-            topMenu.setTitle(ROOT_DIR);
+            //topMenu.setTitle(ROOT_DIR);
             topMenu.setHomeButtonEnabled(false);
         }
-        topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
+        int depth = generatePathTree();
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<String> (c, android.R.layout.simple_spinner_dropdown_item, pathTree);
+        topMenu.setListNavigationCallbacks(spinnerAdapter, this);
+        topMenu.setSelectedNavigationItem(depth);
         invalidateOptionsMenu();
     }
 
