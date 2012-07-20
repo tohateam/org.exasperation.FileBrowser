@@ -30,6 +30,7 @@
     <string name="rename_file">Rename file</string>
     <string name="rename_success">Successfully renamed</string>
     <string name="select_all">Select all</string>
+    <string name="settings">Settings</string>
     <string name="share">Share</string>
     <string name="unknown_alert_title">Unknown file type</string>
     <string name="up_one_level">..</string>

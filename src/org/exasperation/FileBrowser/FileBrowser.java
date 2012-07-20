@@ -19,6 +19,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -26,6 +27,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.StatFs;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -69,6 +71,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     List<File> directoryEntries = new ArrayList<File>();
     List<File> clipboardEntries = new ArrayList<File>();
     List<String> pathTree = new ArrayList<String>();
+    SharedPreferences sharedPrefs;
     ClipType clipboardType = ClipType.EMPTY;
     ActionBar topMenu = null;
     StatFs stat;
@@ -118,6 +121,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         //Log.d(TAG, "onStart()");
 
         super.onStart();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(c);
         topMenu.setDisplayShowTitleEnabled(false);
         topMenu.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         lv.setOnItemClickListener(this);
@@ -212,6 +216,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 return true;
             case R.id.menu_new_directory:
                 newDirectory();
+                return true;
+            case R.id.menu_settings:
+                startActivity(new Intent(c, Settings.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -576,16 +583,24 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         //Log.d(TAG, "fill()");
         final File[] directories = currentDirectory.listFiles(new DirectoryFilter());
         final File[] files = currentDirectory.listFiles(new NoDirectoryFilter());
+        //first add directories then files
         Arrays.sort(directories);
         Arrays.sort(files);
         this.directoryEntries.clear();
+        //Add directories to the entries list
         for (File file : directories){
-            this.directoryEntries.add(file);
+            if (!(file.getName().charAt(0)=='.') || sharedPrefs.getBoolean("show_hidden", true))
+                directoryEntries.add(file);
         }
+        //Add files to the entries list
         for (File file : files){
-            this.directoryEntries.add(file);
+            if (!(file.getName().charAt(0)=='.') || sharedPrefs.getBoolean("show_hidden", true))
+                directoryEntries.add(file);
+        }
+        for (File file : directoryEntries) {
         }
         if (isExternal(currentDirectory)) {
+            //if external, show the external storage space indicator
             colorBar.setVisibility(View.VISIBLE);
             spaceFree.setVisibility(View.VISIBLE);
             spaceUsed.setVisibility(View.VISIBLE);
@@ -598,12 +613,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             spaceUsedBar.setWidth((int)(colorBar.getWidth() * (totalBlocks - freeBlocks) / totalBlocks));
         }
         else {
+            //if not, hide everything
             colorBar.setVisibility(View.GONE);
             spaceFree.setVisibility(View.GONE);
             spaceUsed.setVisibility(View.GONE);
         }
 
         lv.setAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
+
         if (currentDirectory.getAbsolutePath() != ROOT_DIR)
         {
             //topMenu.setTitle(currentDirectory.getName() + File.separator);
