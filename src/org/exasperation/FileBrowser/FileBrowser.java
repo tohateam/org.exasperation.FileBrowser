@@ -252,15 +252,18 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        //Log.d(TAG, "onPrepareActionMode()");
+        Log.d(TAG, "onPrepareActionMode()");
         // Here you can perform updates to the CAB due to
         // an invalidate() request
         menu.clear();
 
         MenuInflater inflater = mode.getMenuInflater();
         inflater.inflate(R.menu.general_selected_menu, menu);
-        if (selectedEntries.size() < 2)
+        if (selectedEntries.size() == 1) {
+            if (selectedEntries.get(0).isFile())
+                inflater.inflate(R.menu.single_file_selected_menu, menu);
             inflater.inflate(R.menu.single_selected_menu, menu);
+        }
 
         return false;
     }
@@ -268,7 +271,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     @Override
     public void onItemCheckedStateChanged(ActionMode mode, int position,
                                           long id, boolean checked) {
-        //Log.d(TAG, "onItemCheckedStateChanged()");
+        Log.d(TAG, "onItemCheckedStateChanged()");
         // Here you can do something when items are selected/de-selected,
         // such as update the title in the 
         if (checked) {
