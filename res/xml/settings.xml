@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/general_preferences"
+    >
 
-    <CheckBoxPreference
-        android:key="show_hidden"
-        android:summary="Show or hide hidden (dot) folders and files"
-        android:title="Show hidden"
-        android:defaultValue="true"
-    />
+        <CheckBoxPreference
+            android:key="show_hidden"
+            android:summary="@string/show_hidden_summary"
+            android:title="@string/show_hidden"
+            android:defaultValue="true"
+        />
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/sorting_preferences"
+    >
+        <CheckBoxPreference
+            android:key="sort_folder_first"
+            android:summary="@string/sort_folder_first_summary"
+            android:title="@string/sort_folder_first"
+            android:defaultValue="true"
+        />
+        <CheckBoxPreference
+            android:key="sort_uppercase_first"
+            android:summary="@string/sort_uppercase_first_summary"
+            android:title="@string/sort_uppercase_first"
+            android:defaultValue="true"
+        />
+    </PreferenceCategory>
 </PreferenceScreen>
