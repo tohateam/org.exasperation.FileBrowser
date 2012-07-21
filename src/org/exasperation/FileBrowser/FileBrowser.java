@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -584,24 +585,61 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
     private void fill() {
         //Log.d(TAG, "fill()");
-        final File[] directories = currentDirectory.listFiles(new DirectoryFilter());
-        final File[] files = currentDirectory.listFiles(new NoDirectoryFilter());
-        //first add directories then files
-        Arrays.sort(directories);
-        Arrays.sort(files);
-        this.directoryEntries.clear();
-        //Add directories to the entries list
-        for (File file : directories){
-            if (!(file.getName().charAt(0)=='.') || sharedPrefs.getBoolean("show_hidden", true))
-                directoryEntries.add(file);
+        directoryEntries.clear();
+        if (sharedPrefs.getBoolean("sort_folder_first", true)) {
+            //if sortFolderFirst is set, load folders separately
+            final File[] directories = currentDirectory.listFiles(new DirectoryFilter());
+            final File[] files = currentDirectory.listFiles(new NoDirectoryFilter());
+
+            if (sharedPrefs.getBoolean("sort_uppercase_first", true)) {
+                //if sortUppercaseFirst is set, use the default sort
+                Arrays.sort(directories);
+                Arrays.sort(files);
+            }
+            else {
+                Arrays.sort(directories, new IgnoreCaseComparator());
+                Arrays.sort(directories, new IgnoreCaseComparator());
+            }
+            if (sharedPrefs.getBoolean("show_hidden", true)) {
+                //Add everything regardless of hiddenness
+                for (File file : directories) {
+                    directoryEntries.add(file);
+                }
+                for (File file : files) {
+                    directoryEntries.add(file);
+                }
+            }
+            else {
+                //Else, check if each one has a dot prefix before adding
+                for (File file : directories){
+                    if (!(file.getName().charAt(0)=='.'))
+                        directoryEntries.add(file);
+                }
+                for (File file : files){
+                    if (!(file.getName().charAt(0)=='.'))
+                        directoryEntries.add(file);
+                }
+            }
         }
-        //Add files to the entries list
-        for (File file : files){
-            if (!(file.getName().charAt(0)=='.') || sharedPrefs.getBoolean("show_hidden", true))
-                directoryEntries.add(file);
+        else {
+            final File[] files = currentDirectory.listFiles();
+            if (sharedPrefs.getBoolean("sort_uppercase_first", true)) {
+                Arrays.sort(files);
+            } else {
+                Arrays.sort(files, new IgnoreCaseComparator());
+            }
+            if (sharedPrefs.getBoolean("show_hidden", true)) {
+                for (File file : files) {
+                     directoryEntries.add(file);
+                }
+            } else {
+                for (File file : files) {
+                    if (!(file.getName().charAt(0)=='.'))
+                        directoryEntries.add(file);
+                }
+            }
         }
-        for (File file : directoryEntries) {
-        }
+
         if (isExternal(currentDirectory)) {
             //if external, show the external storage space indicator
             colorBar.setVisibility(View.VISIBLE);
@@ -835,6 +873,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     private class NoDirectoryFilter implements FileFilter {
         public boolean accept (File file) {
             return !file.isDirectory();
+        }
+    }
+    private class IgnoreCaseComparator implements Comparator<File> {
+        public int compare (File a, File b) {
+            return a.getName().compareToIgnoreCase(b.getName());
         }
     }
 }
