@@ -125,6 +125,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(c);
         topMenu.setDisplayShowTitleEnabled(false);
         topMenu.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        topMenu.setHomeButtonEnabled(true);
+        topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
         lv.setOnItemClickListener(this);
         lv.setMultiChoiceModeListener(this);
         browseTo(currentDirectory);
@@ -662,17 +664,6 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
 
         lv.setAdapter(new FileAdapter(this, R.layout.file_row, this.directoryEntries));
 
-        if (currentDirectory.getAbsolutePath() != ROOT_DIR)
-        {
-            //topMenu.setTitle(currentDirectory.getName() + File.separator);
-            topMenu.setHomeButtonEnabled(true);
-            topMenu.setIcon(getResources().getDrawable(R.drawable.navigate_up));
-        }
-        else
-        {
-            //topMenu.setTitle(ROOT_DIR);
-            topMenu.setHomeButtonEnabled(false);
-        }
         int depth = generatePathTree();
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<String> (c, android.R.layout.simple_spinner_dropdown_item, pathTree);
         topMenu.setListNavigationCallbacks(spinnerAdapter, this);
