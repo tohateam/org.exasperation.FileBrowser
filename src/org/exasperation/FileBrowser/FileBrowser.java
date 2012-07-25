@@ -742,19 +742,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                     }
                     else
                         icon = getResources().getDrawable(R.drawable.file);
-                    if (fileSize != null) {
-                        /*long size = o.length();
-                        int kb = 1024;
-                        if (size < kb)
-                            fileSize.setText(size + "B");
-                        else
-                        {
-                            int exp = (int) (Math.log(size) / Math.log(kb));
-                            String prefix = ("KMGTPE").charAt(exp-1) + ("i");
-                            fileSize.setText(String.format("%.1f%sB", size/Math.pow(kb,exp),prefix));
-                        }*/
-                        fileSize.setText(Formatter.formatShortFileSize(c, o.length()));
-                    }
+
+                    if (fileSize != null)
+                        fileSize.setText(Formatter.formatShortFileSize(c, FileUtils.sizeOf(o)));
                 }
 
                 fileIcon.setImageDrawable(icon);
@@ -763,7 +753,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 if (fileName != null) {
                     fileName.setText(o.getName());
                 }
-                if( fileMeta != null){
+                if( fileMeta != null) {
                     SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
                     fileMeta.setText(format.format(new Date(o.lastModified())));
                 }
