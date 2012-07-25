@@ -60,7 +60,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     public static final String ROOT_DIR = "/";
     public static final String DATE_FORMAT = "MMM d, yyyy";
     public static final String TYPE_PLAINTEXT = "text/plain";
-    public static final double GIGABYTE = 1073741824d;
+    public static final long GIGABYTE = 1073741824;
     
     public enum ClipType { EMPTY, COPY, CUT };
 
@@ -93,7 +93,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         spaceUsed = (TextView) findViewById(R.id.space_used);
         spaceFree = (TextView) findViewById(R.id.space_free);
         colorBar = (LinearLayout) findViewById(R.id.color_bar);
-        stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        stat = new StatFs(Environment.getExternalStorageDirectory().toString());
 
         if (savedInstanceState == null)
         {
@@ -647,13 +647,13 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             colorBar.setVisibility(View.VISIBLE);
             spaceFree.setVisibility(View.VISIBLE);
             spaceUsed.setVisibility(View.VISIBLE);
-            stat.restat(Environment.getExternalStorageDirectory().getPath());
-            double freeBlocks = (double) stat.getFreeBlocks() / (double) stat.getBlockSize();
-            double totalBlocks = (double) stat.getBlockCount() / (double) stat.getBlockSize();
-            spaceFree.setText(Math.round(freeBlocks*100.0)/100.0 + "GiB Free");
-            spaceUsed.setText((Math.round((totalBlocks - freeBlocks)*100.0)/100.0) + "GiB Used ");
-            spaceFreeBar.setWidth((int)(colorBar.getWidth() * freeBlocks / totalBlocks));
-            spaceUsedBar.setWidth((int)(colorBar.getWidth() * (totalBlocks - freeBlocks) / totalBlocks));
+            stat.restat(Environment.getExternalStorageDirectory().toString());
+            long freeBytes = (long) stat.getFreeBlocks() * stat.getBlockSize();
+            long totalBytes = (long) stat.getBlockCount() * stat.getBlockSize();
+            spaceFree.setText(Math.round(freeBytes*100.0/GIGABYTE)/100.0 + "GiB Free");
+            spaceUsed.setText((Math.round((totalBytes - freeBytes)*100.0/GIGABYTE)/100.0) + "GiB Used ");
+            spaceFreeBar.setWidth((int)(colorBar.getWidth() * freeBytes / totalBytes));
+            spaceUsedBar.setWidth((int)(colorBar.getWidth() * (totalBytes - freeBytes) / totalBytes));
         }
         else {
             //if not, hide everything
