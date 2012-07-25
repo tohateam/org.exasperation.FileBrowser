@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -650,8 +651,10 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             stat.restat(Environment.getExternalStorageDirectory().toString());
             long freeBytes = (long) stat.getFreeBlocks() * stat.getBlockSize();
             long totalBytes = (long) stat.getBlockCount() * stat.getBlockSize();
-            spaceFree.setText(Math.round(freeBytes*100.0/GIGABYTE)/100.0 + "GiB Free");
-            spaceUsed.setText((Math.round((totalBytes - freeBytes)*100.0/GIGABYTE)/100.0) + "GiB Used ");
+            //spaceFree.setText(Math.round(freeBytes*100.0/GIGABYTE)/100.0 + "GiB Free");
+            //spaceUsed.setText((Math.round((totalBytes - freeBytes)*100.0/GIGABYTE)/100.0) + "GiB Used ");
+            spaceFree.setText(Formatter.formatShortFileSize(c, freeBytes) + " Free");
+            spaceUsed.setText(Formatter.formatShortFileSize(c, totalBytes - freeBytes) + " Used");
             spaceFreeBar.setWidth((int)(colorBar.getWidth() * freeBytes / totalBytes));
             spaceUsedBar.setWidth((int)(colorBar.getWidth() * (totalBytes - freeBytes) / totalBytes));
         }
@@ -740,7 +743,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                     else
                         icon = getResources().getDrawable(R.drawable.file);
                     if (fileSize != null) {
-                        long size = o.length();
+                        /*long size = o.length();
                         int kb = 1024;
                         if (size < kb)
                             fileSize.setText(size + "B");
@@ -749,7 +752,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                             int exp = (int) (Math.log(size) / Math.log(kb));
                             String prefix = ("KMGTPE").charAt(exp-1) + ("i");
                             fileSize.setText(String.format("%.1f%sB", size/Math.pow(kb,exp),prefix));
-                        }
+                        }*/
+                        fileSize.setText(Formatter.formatShortFileSize(c, o.length()));
                     }
                 }
 
