@@ -749,11 +749,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                             icon = getResources().getDrawable(R.drawable.folder);
                             fileSize.setText(listLength + " Files");
                         }
+                    } else {
+                        fileSize.setText("Inaccessible");
                     }
-                    //fileSize.setVisibility(View.GONE);
                 }
                 else {
-                    //fileSize.setVisibility(View.VISIBLE);
                     String type = URLConnection.guessContentTypeFromName(o.getName());
                     if (type != null) {
                         final Intent intent = new Intent(Intent.ACTION_VIEW);
