@@ -750,6 +750,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                             fileSize.setText(listLength + " Files");
                         }
                     } else {
+                        icon = getResources().getDrawable(R.drawable.blocked);
                         fileSize.setText("Inaccessible");
                     }
                 }
