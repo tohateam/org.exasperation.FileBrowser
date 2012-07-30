@@ -35,6 +35,8 @@
     <string name="share">Share</string>
     <string name="show_hidden">Show hidden</string>
     <string name="show_hidden_summary">Display or hide hidden files and folders</string>
+    <string name="show_inaccessible">Show inaccessible folders</string>
+    <string name="show_inaccessible_summary">Display or hide restricted folders</string>
     <string name="sort_folder_first">Sort folders first</string>
     <string name="sort_folder_first_summary">Put folders at the top</string>
     <string name="sort_uppercase_first">Sort uppercase first</string>

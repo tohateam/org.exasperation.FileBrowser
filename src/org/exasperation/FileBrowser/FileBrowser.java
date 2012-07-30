@@ -625,6 +625,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             }
         }
         else {
+            //if sortFolderFirst is not set, load them together
             final File[] files = currentDirectory.listFiles();
             if (sharedPrefs.getBoolean("sort_uppercase_first", true)) {
                 Arrays.sort(files);
@@ -642,6 +643,20 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 }
             }
         }
+
+        if (!sharedPrefs.getBoolean("show_inaccessible", true)) {
+            for (int i = 0; i < directoryEntries.size(); ) {
+                final File checkFile = directoryEntries.get(i);
+                if (checkFile.isDirectory() &&
+                    (!checkFile.canRead() || !checkFile.canExecute())) {
+                    directoryEntries.remove(i);
+                }
+                else {
+                    i++;
+                }
+            }
+        }
+
 
         if (isExternal(currentDirectory)) {
             //if external, show the external storage space indicator

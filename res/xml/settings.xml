@@ -4,14 +4,18 @@
     <PreferenceCategory
         android:title="@string/general_preferences"
     >
-
         <CheckBoxPreference
             android:key="show_hidden"
             android:summary="@string/show_hidden_summary"
             android:title="@string/show_hidden"
             android:defaultValue="true"
         />
-
+        <CheckBoxPreference
+            android:key="show_inaccessible"
+            android:summary="@string/show_inaccessible_summary"
+            android:title="@string/show_inaccessible"
+            android:defaultValue="true"
+        />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/sorting_preferences"
