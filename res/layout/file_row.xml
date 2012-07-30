@@ -29,8 +29,8 @@
         android:id="@+id/file_size"
         android:layout_toRightOf="@id/file_icon"
         android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="64dp"
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
         android:singleLine="true"
@@ -42,8 +42,8 @@
         android:id="@+id/file_meta"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="96dp"
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
         android:singleLine="true"
@@ -52,3 +52,5 @@
         android:textColor="#999999"
     />
 </RelativeLayout>
+<!--android:layout_width="64dp"
+        android:layout_width="96dp" -->
