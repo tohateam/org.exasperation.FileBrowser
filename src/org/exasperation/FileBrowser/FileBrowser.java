@@ -724,11 +724,21 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 Drawable icon = null;
 
                 if (o.isDirectory()) {
-                    icon = getResources().getDrawable(R.drawable.folder);
-                    fileSize.setVisibility(View.GONE);
+                    if (o.canRead() && 
+                        o.canExecute()) {
+                        int listLength = o.listFiles().length;
+                        if (listLength == 0) {
+                            icon = getResources().getDrawable(R.drawable.empty);
+                            fileSize.setText("Empty");
+                        } else {
+                            icon = getResources().getDrawable(R.drawable.folder);
+                            fileSize.setText(listLength + " Files");
+                        }
+                    }
+                    //fileSize.setVisibility(View.GONE);
                 }
                 else {
-                    fileSize.setVisibility(View.VISIBLE);
+                    //fileSize.setVisibility(View.VISIBLE);
                     String type = URLConnection.guessContentTypeFromName(o.getName());
                     if (type != null) {
                         final Intent intent = new Intent(Intent.ACTION_VIEW);
