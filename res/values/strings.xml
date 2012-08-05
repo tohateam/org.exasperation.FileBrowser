@@ -19,6 +19,7 @@
     <string name="general_preferences">General Preferences</string>
     <string name="new_directory">New Folder</string>
     <string name="new_file">New File</string>
+    <string name="no_activity">There is no app installed to open files of type</string>
     <string name="no">No</string>
     <string name="not_mounted">External storage is not mounted or does not have read/write access</string>
     <string name="ok">Okay</string>

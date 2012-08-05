@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import android.app.ProgressDialog;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -531,11 +532,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         builder.create().show();
     }
 
-    private void browseTo(final File aDirectory)
+    private void browseTo(final File target)
     {
         //Log.d(TAG, "browseTo()");
         if (isExternal(currentDirectory) &&
-            isExternal(aDirectory) &&
+            isExternal(target) &&
             !Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
         {
             Toast t = Toast.makeText(c, R.string.not_mounted, Toast.LENGTH_SHORT);
@@ -543,11 +544,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             browseTo(new File(ROOT_DIR));
             return;
         }
-        if (aDirectory.isDirectory())
+        if (target.isDirectory())
         {
-            if (aDirectory.canRead() && aDirectory.canExecute())
+            if (target.canRead() && target.canExecute())
             {
-                currentDirectory = aDirectory;
+                currentDirectory = target;
                 fill();
             }
             else
@@ -558,7 +559,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         else
         {
-            String type = URLConnection.guessContentTypeFromName(aDirectory.getName());
+            String type = URLConnection.guessContentTypeFromName(target.getName());
             final Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             if (type == null) {
@@ -568,7 +569,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                        .setCancelable(true)
                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                            public void onClick(DialogInterface dialog, int id) {
-                               intent.setDataAndType(Uri.fromFile(aDirectory), TYPE_PLAINTEXT);
+                               intent.setDataAndType(Uri.fromFile(target), TYPE_PLAINTEXT);
                                startActivity(intent);
                            }
                         })
@@ -580,8 +581,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 builder.create().show();
             }
             else {
-                intent.setDataAndType(Uri.fromFile(aDirectory),type);
-                startActivity(intent);
+                try {
+                    intent.setDataAndType(Uri.fromFile(target),type);
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e)
+                {
+                    Toast t = Toast.makeText(c, R.string.no_activity + " " + type, Toast.LENGTH_SHORT);
+                    t.show();
+                }
             }
         }
     }
