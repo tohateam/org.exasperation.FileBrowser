@@ -777,7 +777,15 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                         icon = getResources().getDrawable(R.drawable.file);
 
                     if (fileSize != null)
-                        fileSize.setText(Formatter.formatShortFileSize(c, FileUtils.sizeOf(o)));
+                    {
+                        try {
+                            fileSize.setText(Formatter.formatShortFileSize(c, FileUtils.sizeOf(o)));
+                        }
+                        catch (IllegalArgumentException e)
+                        {
+                            fileSize.setText("Unknown");
+                        }
+                    }
                 }
 
                 fileIcon.setImageDrawable(icon);
