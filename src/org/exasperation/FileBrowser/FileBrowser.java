@@ -82,8 +82,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     TextView spaceUsedBar, spaceFreeBar, spaceUsed, spaceFree;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         //Log.d(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
@@ -97,30 +96,28 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         colorBar = (LinearLayout) findViewById(R.id.color_bar);
         stat = new StatFs(Environment.getExternalStorageDirectory().toString());
 
-        if (savedInstanceState == null)
-        {
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+        if (savedInstanceState == null) {
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 currentDirectory = externalStorageDirectory;
-            else
-            {
+            }
+            else {
                 currentDirectory = new File(ROOT_DIR);
                 Toast t = Toast.makeText(c, R.string.not_mounted, Toast.LENGTH_SHORT);
                 t.show();
             }
         }
-        else
-        {
+        else {
             currentDirectory = new File(savedInstanceState.getString("savedPath"));
             int savedPosition = savedInstanceState.getInt("savedPosition");
             int savedListTop = savedInstanceState.getInt("savedListTop");
-            if (savedPosition >= 0)
+            if (savedPosition >= 0) {
                 lv.setSelectionFromTop(savedPosition, savedListTop);
+            }
         }
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         //Log.d(TAG, "onStart()");
 
         super.onStart();
@@ -135,40 +132,35 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         //Log.d(TAG, "onResume()");
 
         super.onResume();
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         //Log.d(TAG, "onPause()");
 
         super.onPause();
     }
 
     @Override
-    public void onStop()
-    {
+    public void onStop() {
         //Log.d(TAG, "onStop()");
 
         super.onStop();
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         //Log.d(TAG, "onDestroy()");
 
         super.onDestroy();
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         //Log.d(TAG, "onSaveInstanceState()");
 
         super.onSaveInstanceState(savedInstanceState);
@@ -182,16 +174,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         //Log.d(TAG, "onRestoreInstanceState()");
 
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         //Log.d(TAG, "onPrepareOptionsMenu()" + clipboardType);
         MenuInflater inflater = getMenuInflater();
         menu.clear();
@@ -232,15 +222,16 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     
     @Override
     public void onBackPressed() {
-        if (currentDirectory.getParentFile() != null)
+        if (currentDirectory.getParentFile() != null) {
             browseTo(currentDirectory.getParentFile());
-        else
+        }
+        else {
             finish();
+        }
     }
 
     @Override
-    public void onItemClick(AdapterView list, View view, int position, long id)
-    {
+    public void onItemClick(AdapterView list, View view, int position, long id) {
         //Log.d(TAG, "onItemClick()");
         String newPath = null;
         newPath = currentDirectory.getAbsolutePath() + File.separator + directoryEntries.get(position).getName();
@@ -274,8 +265,10 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     }
 
     @Override
-    public void onItemCheckedStateChanged(ActionMode mode, int position,
-                                          long id, boolean checked) {
+    public void onItemCheckedStateChanged(ActionMode mode,
+                                          int position,
+                                          long id,
+                                          boolean checked) {
         Log.d(TAG, "onItemCheckedStateChanged()");
         // Here you can do something when items are selected/de-selected,
         // such as update the title in the 
@@ -339,8 +332,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     public boolean onNavigationItemSelected(int itemPosition, long itemid) {
         String path = ROOT_DIR;
         if (itemPosition != 0) {
-            for (int i = 1; i <= itemPosition; i++)
-            {
+            for (int i = 1; i <= itemPosition; i++) {
                 path += pathTree.get(i);
             }
             //we have to cut off the last directory separator
@@ -348,34 +340,30 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         }
         //Log.d(TAG, path);
         //Log.d(TAG, currentDirectory.getAbsolutePath());
-        if (path.equals(currentDirectory.getAbsolutePath()))
+        if (path.equals(currentDirectory.getAbsolutePath())) {
             return false;
+        }
         else {
             browseTo(new File(path)); 
             return true;
         }
     }
 
-    private void selectAll()
-    {
+    private void selectAll() {
         selectedEntries.clear();
-        for (int i = 0; i < directoryEntries.size(); i++)
-        {
+        for (int i = 0; i < directoryEntries.size(); i++) {
             lv.setItemChecked(i, true);
         }
     }
 
-    private void share(final File selected)
-    {
+    private void share(final File selected) {
         final File file = selected.getAbsoluteFile();
         Intent i = new Intent(android.content.Intent.ACTION_SEND);
         String type = URLConnection.guessContentTypeFromName(file.getName());
-        if (type != null)
-        {
+        if (type != null) {
             i.setType(type);
         }
-        else
-        {
+        else {
             i.setType("*/*");
         }
         i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
@@ -383,31 +371,28 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
     }
 
 
-    private void clip(final List<File> files)
-    {
-        for (File file : files)
-        {
+    private void clip(final List<File> files) {
+        for (File file : files) {
             clipboardEntries.add(file.getAbsoluteFile());
         }
         Toast t = Toast.makeText(c, R.string.added_clipboard, Toast.LENGTH_SHORT);
         t.show();
     }
 
-    private void paste()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    private void paste() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle(getString(R.string.paste_file))
                .setMessage(R.string.confirm_paste)
                .setCancelable(true)
                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
-                       if (clipboardType == ClipType.EMPTY)
-                       {
+                       if (clipboardType == ClipType.EMPTY) {
                            dialog.cancel();
                            return;
                        }
-                       else
+                       else {
                            new PasteTask(c).execute(clipboardEntries.toArray(new File[1]));
+                       }
                    }
                })
                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -422,7 +407,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         final EditText nameEditor = new EditText(getApplicationContext());
         nameEditor.setText(R.string.new_directory);
         nameEditor.selectAll();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle(getString(R.string.new_directory))
                .setView(nameEditor)
                .setCancelable(true)
@@ -449,7 +434,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         final EditText nameEditor = new EditText(getApplicationContext());
         nameEditor.setText(R.string.default_filename);
         nameEditor.selectAll();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle(getString(R.string.new_file))
                .setView(nameEditor)
                .setCancelable(true)
@@ -480,14 +465,13 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         final EditText nameEditor = new EditText(getApplicationContext());
         nameEditor.setText(file.getName());
         nameEditor.selectAll();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle(getString(R.string.rename_file))
                .setView(nameEditor)
                .setCancelable(true)
                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
-                       if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString())))
-                       {
+                       if (file.renameTo(new File(currentDirectory, nameEditor.getText().toString()))) {
                            Toast t = Toast.makeText(c, R.string.rename_success, Toast.LENGTH_SHORT);
                            t.show();
                            fill();
@@ -508,14 +492,14 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         d.show();
     }
 
-    private void delete(final List<File> selected)
-    {
+    private void delete(final List<File> selected) {
         //Log.d(TAG, "delete()");
         final List<File> files = new ArrayList<File>();
-        for (File file : selected)
+        for (File file : selected) {
             files.add(file);
+        }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle(getString(R.string.delete_file))
                .setMessage(getString(R.string.confirm_delete))
                .setCancelable(true)
@@ -532,38 +516,31 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
         builder.create().show();
     }
 
-    private void browseTo(final File target)
-    {
+    private void browseTo(final File target) {
         //Log.d(TAG, "browseTo()");
-        if (isExternal(currentDirectory) &&
-            isExternal(target) &&
-            !Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-        {
+        if (isExternal(currentDirectory) && isExternal(target) &&
+            !Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Toast t = Toast.makeText(c, R.string.not_mounted, Toast.LENGTH_SHORT);
             t.show();
             browseTo(new File(ROOT_DIR));
             return;
         }
-        if (target.isDirectory())
-        {
-            if (target.canRead() && target.canExecute())
-            {
+        if (target.isDirectory()) {
+            if (target.canRead() && target.canExecute()) {
                 currentDirectory = target;
                 fill();
             }
-            else
-            {
+            else {
                 Toast t = Toast.makeText(c, R.string.cannot_access, Toast.LENGTH_SHORT);
                 t.show();
             }
         }
-        else
-        {
+        else {
             String type = URLConnection.guessContentTypeFromName(target.getName());
             final Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             if (type == null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(c);
                 builder.setTitle(getString(R.string.unknown_alert_title))
                        .setMessage(getString(R.string.open_as_text))
                        .setCancelable(true)
@@ -584,8 +561,8 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 try {
                     intent.setDataAndType(Uri.fromFile(target),type);
                     startActivity(intent);
-                } catch (ActivityNotFoundException e)
-                {
+                }
+                catch (ActivityNotFoundException e) {
                     Toast t = Toast.makeText(c, R.string.no_activity + " " + type, Toast.LENGTH_SHORT);
                     t.show();
                 }
@@ -655,7 +632,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             for (int i = 0; i < directoryEntries.size(); ) {
                 final File checkFile = directoryEntries.get(i);
                 if (checkFile.isDirectory() &&
-                    (!checkFile.canRead() || !checkFile.canExecute())) {
+                    !(checkFile.canRead() && checkFile.canExecute())) {
                     directoryEntries.remove(i);
                 }
                 else {
@@ -776,13 +753,11 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                     else
                         icon = getResources().getDrawable(R.drawable.file);
 
-                    if (fileSize != null)
-                    {
+                    if (fileSize != null) {
                         try {
                             fileSize.setText(Formatter.formatShortFileSize(c, FileUtils.sizeOf(o)));
                         }
-                        catch (IllegalArgumentException e)
-                        {
+                        catch (IllegalArgumentException e) {
                             fileSize.setText("Unknown");
                         }
                     }
@@ -794,7 +769,7 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                 if (fileName != null) {
                     fileName.setText(o.getName());
                 }
-                if( fileMeta != null) {
+                if (fileMeta != null) {
                     SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
                     fileMeta.setText(format.format(new Date(o.lastModified())));
                 }
@@ -821,27 +796,24 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             
         }
         protected Boolean doInBackground(File... files) {
-            if (clipboardType == ClipType.CUT)
-            {
-                for (int i = 0; i < files.length; i++)
-                {
+            if (clipboardType == ClipType.CUT) {
+                for (int i = 0; i < files.length; i++) {
                     files[i].renameTo(new File(currentDirectory, files[i].getName()));
                 }
                 clipboardEntries.clear();
                 clipboardType = ClipType.EMPTY;
             }
-            else if (clipboardType == ClipType.COPY)
-            {
-                for (int i = 0; i < files.length; i++)
-                {
-                    try{
-                        if (files[i].isDirectory())
+            else if (clipboardType == ClipType.COPY) {
+                for (int i = 0; i < files.length; i++) {
+                    try {
+                        if (files[i].isDirectory()) {
                             FileUtils.copyDirectoryToDirectory(files[i], currentDirectory);
-                        else
+                        }
+                        else {
                             FileUtils.copyFileToDirectory(files[i], currentDirectory);
                         }
-                    catch (IOException e)
-                    {}
+                    }
+                    catch (IOException e) {}
                 }
             }
             return true; 
@@ -871,16 +843,16 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             dialog.show();
         }
         protected Boolean doInBackground(File... files) {
-            for (int i = 0; i < files.length; i++)
-            {
-                if (files[i].isDirectory())
-                    try{
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
+                    try {
                         FileUtils.deleteDirectory(files[i]);
                     }
-                    catch(Exception e)
-                    {}
-                else
+                    catch(Exception e) {}
+                }
+                else {
                     files[i].delete();
+                }
             }
             return true; 
         }
