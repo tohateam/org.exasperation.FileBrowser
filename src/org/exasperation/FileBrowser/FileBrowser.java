@@ -747,12 +747,13 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
                         final ResolveInfo app = getPackageManager().resolveActivity(intent, 0);
                         if (app != null)
                             icon = app.loadIcon(getPackageManager());
-                        else 
+                        else {
                             icon = getResources().getDrawable(R.drawable.file);
+                        }
                     }
-                    else
+                    else {
                         icon = getResources().getDrawable(R.drawable.file);
-
+                    }
                     if (fileSize != null) {
                         try {
                             fileSize.setText(Formatter.formatShortFileSize(c, FileUtils.sizeOf(o)));
@@ -819,7 +820,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             return true; 
         }
         protected void onPostExecute(Boolean result) {
-            dialog.dismiss();
+            try {
+                dialog.dismiss();
+            } catch (Exception e) {}
             Toast t = Toast.makeText(c, R.string.pasted, Toast.LENGTH_SHORT);
             t.show();
             fill();
@@ -857,7 +860,9 @@ public class FileBrowser extends Activity implements ListView.OnItemClickListene
             return true; 
         }
         protected void onPostExecute(Boolean result) {
-            dialog.dismiss();
+            try {
+                dialog.dismiss();
+            } catch (Exception e) {}
             Toast t = Toast.makeText(c, R.string.deleted, Toast.LENGTH_SHORT);
             t.show();
             fill();
